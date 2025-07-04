@@ -4,7 +4,7 @@
 
     <Sidebar />
 
-    <div class="main__content">
+    <div class="main__content shadow-xl">
       <slot />
     </div>
   </main>
@@ -28,6 +28,7 @@
 
   &__content {
     overflow: auto;
+    border-radius: 16px 0 0 0;
   }
 }
 </style>

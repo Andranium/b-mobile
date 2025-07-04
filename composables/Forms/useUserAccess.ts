@@ -9,7 +9,14 @@ export const useUserAccess = <T>() => {
         console.log(event.data);
     }
 
+    const userSignin = (event: FormSubmitEvent<T>) => {
+        toast.add({ title: 'Добро пожаловать', description: 'Вы успешно зашли в аккаунт.', color: 'primary' });
+
+        console.log(event.data);
+    }
+
     return {
-        userSignup
+        userSignup,
+        userSignin
     }
 };

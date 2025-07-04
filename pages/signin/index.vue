@@ -1,6 +1,6 @@
 <template>
-  <div class="sign-up bg-primary">
-    <FormsSignup />
+  <div class="sign-in bg-primary">
+    <FormsSignin />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 </script>
 
 <style scoped lang="scss">
-.sign-up {
+.sign-in {
   display: flex;
   align-items: center;
   justify-content: center;

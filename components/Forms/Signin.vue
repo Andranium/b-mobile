@@ -1,29 +1,19 @@
 <template>
-  <div class="sign-up">
-    <UCard class="sign-up__card">
+  <div class="sign-in">
+    <UCard class="sign-in__card">
       <template #header>
         <div class="font-bold">
-          Регистрация
+          Вход
         </div>
       </template>
 
       <UForm
           ref="form"
           :schema="schema"
+          class="sign-in__form"
           :state="state"
-          class="sign-up__form"
-          @submit="userAccess.userSignup"
+          @submit="userAccess.userSignin"
       >
-        <UFormField label="Ваше имя" name="name">
-          <UInput
-              v-model="state.name"
-              variant="soft"
-              size="xl"
-              class="w-full"
-              placeholder="Иван"
-          />
-        </UFormField>
-
         <UFormField label="Телефон" name="phone">
           <UInput
               v-model="state.phone"
@@ -53,13 +43,13 @@
         <UButton
             size="lg"
             color="primary"
-            @click="signupUser"
+            @click="signinUser"
         >
-          Регистрация
+          Войти
         </UButton>
 
-        <ULink class="ml-2" to="/signin">
-          Есть аккаунт
+        <ULink class="ml-2">
+          Забыл пароль
         </ULink>
       </template>
     </UCard>
@@ -67,31 +57,30 @@
 </template>
 
 <script setup lang="ts">
-import type { InferType } from 'yup'
-import type { SignupUserData } from "~/components/Forms/types";
-import { signUpForm } from "~/schemas";
 import { phoneMask } from "~/utils";
+import { signInForm } from "~/schemas";
+import type { InferType } from "yup";
+import type { SigninUser } from "~/components/Forms/types";
 import { useUserAccess } from "~/composables/Forms/useUserAccess";
 
-const schema = signUpForm;
-
-type Schema = InferType<typeof schema>
-
-const userAccess = useUserAccess<Schema>();
+const schema = signInForm;
 
 const form = ref();
 
-const signupUser = () => form.value.submit();
+type Schema = InferType<typeof schema>
 
-const state = reactive<SignupUserData>({
-  name: '',
+const signinUser = () => form.value.submit();
+
+const userAccess = useUserAccess<Schema>();
+
+const state = reactive<SigninUser>({
   phone: '',
-  password: ''
+  password: '',
 });
 </script>
 
 <style scoped lang="scss">
-.sign-up {
+.sign-in {
   &__card {
     width: 450px;
   }

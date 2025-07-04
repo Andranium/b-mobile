@@ -12,6 +12,5 @@
 .header {
   display: flex;
   align-items: center;
-  border-bottom: 1px solid lightgray;
 }
 </style>
