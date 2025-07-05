@@ -3,4 +3,10 @@
 
 @theme static {
     --color-primary: #FFC300;
+    --color-secondary: #001D3D;
+}
+
+.main-title {
+    font-size: 48px;
+    font-weight: 600;
 }

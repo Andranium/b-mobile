@@ -4,12 +4,16 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: [
+    '@nuxt/icon',
+    '@nuxt/ui',
     '@nuxt/eslint',
     '@nuxt/fonts',
-    '@nuxt/icon',
     '@nuxt/image',
-    '@nuxt/ui'
   ],
 
   css: ['~/assets/css/main.css'],
+
+  icon: {
+    cssLayer: 'components',
+  },
 })
