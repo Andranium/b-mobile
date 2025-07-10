@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/image',
+    'nuxt-swiper',
   ],
 
   css: ['~/assets/css/main.css'],

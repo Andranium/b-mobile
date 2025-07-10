@@ -1,7 +1,8 @@
 <template>
   <div class="hero">
     <HeroCard />
-    <HeroCard />
+
+    <HeroNews />
   </div>
 </template>
 
