@@ -4,8 +4,10 @@
 
     <Sidebar class="main__sidebar" />
 
-    <div class="main__content">
-      <slot />
+    <div class="main__content p-4 pr-0 lg:p-8 lg:pr-0">
+      <div class="main__wrapper pr-4 lg:pr-8">
+        <slot />
+      </div>
     </div>
   </main>
 </template>
@@ -34,6 +36,16 @@
     overflow: auto;
     border-radius: 16px 0 0 0;
     box-shadow: -15px -4px 41px -22px rgba(34, 60, 80, 0.19);
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  &__wrapper {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    border-radius: 16px;
   }
 }
 </style>
