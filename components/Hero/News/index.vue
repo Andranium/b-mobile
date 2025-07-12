@@ -2,8 +2,16 @@
   <div class="news shadow-md">
     <client-only>
       <swiper-container ref="news" :init="false">
-        <swiper-slide v-for="n in 5" :key="n">
-          hello {{ n }}
+        <swiper-slide
+            class="news-slide news-slide--scooters"
+        >
+          <h3 class="news-slide__title">Новинка ! <br> Электроскутеры</h3>
+        </swiper-slide>
+
+        <swiper-slide
+            class="news-slide news-slide--investment"
+        >
+          <h3 class="news-slide__title">Инвестиции с перспективой: <br> Начните сегодня</h3>
         </swiper-slide>
       </swiper-container>
 
@@ -39,8 +47,6 @@ const swiper = useSwiper(news, {
   ],
 });
 
-const slides = reactive(Array.from({ length: 10 }));
-
 onMounted(() => {
   console.log(swiper.instance);
 });
@@ -52,23 +58,38 @@ onMounted(() => {
   width: 100%;
   aspect-ratio: 16 / 7;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 1rem;
 }
 
 swiper-container {
   height: 100%;
-  border-radius: 16px;
+  border-radius: 1rem;
 }
 
 swiper-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
   height: 100%;
-  font-weight: bold;
-  font-family: 'Roboto', sans-serif;
-  background-color: gray;
-  border-radius: 16px;
+  border-radius: 1rem;
+}
+
+.news-slide {
+  padding: 2rem;
+  cursor: pointer;
+
+  &--scooters {
+    background: url('@/assets/image/electro-scooter.png') no-repeat bottom right, radial-gradient(circle at center, #F0F0F0 0%, #ADD8E6 100%);
+    color: var(--color-secondary);
+    background-size: 65%, contain;
+  }
+
+  &--investment {
+    background: url('@/assets/image/investment.png') no-repeat 111% 117%, radial-gradient(circle at center, #0083c0 0%, #3553a9 100%);
+    color: white;
+    background-size: 65%, contain;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 600;
+  }
 }
 </style>

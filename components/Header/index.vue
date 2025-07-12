@@ -1,5 +1,5 @@
 <template>
-  <header class="header p-4">
+  <header class="header p-4 lg:pr-8">
     <UNavigationMenu
         color="primary" variant="pill" :items="items"
     />
