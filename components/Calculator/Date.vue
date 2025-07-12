@@ -1,0 +1,60 @@
+<template>
+  <div class="calculator-date">
+    <UPopover>
+      <CalculatorSelector
+          placeholder="Дата"
+          :value="dateRange"
+          @clear-data="clearDate"
+      />
+
+      <template #content>
+        <UCalendar
+            v-model="modelValue"
+            :min-value="minValue"
+            class="p-2"
+            :number-of-months="2"
+            range
+            :week-starts-on="0"
+            weekday-format="short"
+            locale="ru-RU"
+        />
+      </template>
+    </UPopover>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { DateFormatter, getLocalTimeZone, today } from '@internationalized/date'
+import type {CalendarDate} from '@internationalized/date';
+
+const minValue = today('UTC');
+
+const df = new DateFormatter('ru-RU', {
+  month: "short",
+  day: "numeric",
+})
+
+const modelValue = shallowRef();
+
+const dateFormatter = (date: CalendarDate) => {
+  return df.format(date.toDate(getLocalTimeZone()));
+}
+
+const dateRange = computed(() => {
+  if (!modelValue.value?.start || !modelValue.value?.end) {
+    return '';
+  }
+
+  return `${dateFormatter(modelValue.value.start)} - ${dateFormatter(modelValue.value.end)}`;
+});
+
+const clearDate = () => {
+  modelValue.value = {};
+}
+</script>
+
+<style scoped lang="scss">
+.calculator-date {
+  width: 100%;
+}
+</style>
