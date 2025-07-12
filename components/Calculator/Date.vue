@@ -17,6 +17,7 @@
             :week-starts-on="0"
             weekday-format="short"
             locale="ru-RU"
+            :year-controls="false"
         />
       </template>
     </UPopover>

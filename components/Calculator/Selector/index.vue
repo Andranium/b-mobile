@@ -9,7 +9,7 @@
       </div>
 
       <div
-          v-if="value"
+          v-show="value"
           class="calculator-selector__value"
       >
         {{ value }}
@@ -51,15 +51,29 @@ const emits = defineEmits(["clearData"]);
 
     .calculator-selector__placeholder {
       font-size: 1rem;
+      transform: translateY(-100%);
     }
+  }
+
+  &__content {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
   }
 
   &__placeholder {
     font-size: 1.125rem;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: transform .2s ease;
   }
 
   &__value {
     font-size: 1.125rem;
+    margin-top: 24px;
   }
 
   &__close {
