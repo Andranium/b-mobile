@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/image',
     'nuxt-swiper',
+    '@morev/vue-transitions/nuxt',
   ],
 
   css: ['~/assets/css/main.css'],

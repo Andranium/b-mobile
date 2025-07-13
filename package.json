@@ -11,6 +11,7 @@
     "lintfix": "eslint . --fix"
   },
   "dependencies": {
+    "@morev/vue-transitions": "^3.0.5",
     "@nuxt/eslint": "^1.5.0",
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/icon": "^1.15.0",

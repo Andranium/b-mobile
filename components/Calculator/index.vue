@@ -6,7 +6,9 @@
 
     <div class="calculator__wrapper">
       <CalculatorDate />
-      <CalculatorSelector placeholder="Машина" />
+
+      <CalculatorCars />
+
       <CalculatorSelector placeholder="Маршрут" />
     </div>
   </div>
