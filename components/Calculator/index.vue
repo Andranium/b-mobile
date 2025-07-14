@@ -9,7 +9,7 @@
 
       <CalculatorCars />
 
-      <CalculatorSelector placeholder="Маршрут" />
+      <CalculatorNavigation />
     </div>
   </div>
 </template>

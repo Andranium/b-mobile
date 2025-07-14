@@ -8,6 +8,7 @@
         v-model="carQuery"
         placeholder="Поиск..."
         class="w-full"
+        size="xl"
     />
 
     <transition-fade
