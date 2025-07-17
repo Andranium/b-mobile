@@ -20,9 +20,11 @@
         </div>
 
         <USelect
-            v-model="value"
+            v-model="office"
             :disabled="!outside"
-            :items="offices"
+            :items="OFFICES"
+            value-key="id"
+            label-key="city"
             size="xl"
             :ui="{
               trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
@@ -55,6 +57,12 @@
           </template>
         </UInputMenu>
       </div>
+
+      <CalculatorMap
+          :office-coords="selectedOffice.coords"
+          :destination-coords="destinationCoords"
+          @update:distance="distance = $event"
+      />
     </div>
 
     <template #footer>
@@ -63,7 +71,7 @@
           Закрыть
         </UButton>
 
-        <UButton>
+        <UButton @click="saveDistance">
           Сохранить маршрут
         </UButton>
       </div>
@@ -73,16 +81,25 @@
 
 <script setup lang="ts">
 import { debounce } from "@morev/utils";
-import type { LocationItem } from "~/components/Calculator/Navigation/types";
+import type { LocationItem } from "~/components/Calculator/types";
+
+import { OFFICES } from '../constants';
+
+const emits = defineEmits(["update:navigation"]);
 
 const outside = ref(false);
 
-const offices = ref(['Нижний новгород', 'Санкт-Петербург', 'Владимир']);
-const value = ref('Владимир');
+const office = ref(0);
 
-const selectedAddress = ref('');
+const selectedAddress = ref();
 
 const searchTerm = ref('');
+
+const distance = ref(0);
+
+const selectedOffice = computed(() => {
+  return OFFICES[office.value];
+});
 
 const changeSearchTerm = debounce((address: string) => {
   searchTerm.value = address;
@@ -90,6 +107,14 @@ const changeSearchTerm = debounce((address: string) => {
 
 const isLoading = computed(() => {
   return status.value !== 'success';
+});
+
+const destinationCoords = computed<[number, number] | undefined>(() => {
+  if (!selectedAddress.value) {
+    return;
+  }
+
+  return [selectedAddress.value.lat, selectedAddress.value.lon];
 });
 
 const cityFilter = (locationArr: LocationItem[]) => locationArr.filter(location => location.class === 'place' && ['city', 'town', 'village', 'hamlet'].includes(location.type));
@@ -101,6 +126,14 @@ const { data: location, status } = useFetch<LocationItem[]>('/api/getAddress', {
   immediate: false,
   transform: cityFilter
 });
+
+const saveDistance = () => {
+  emits('update:navigation', {
+    office: selectedOffice.value,
+    destination: selectedAddress.value,
+    distance: distance.value,
+  });
+}
 </script>
 
 <style scoped lang="scss">

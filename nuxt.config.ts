@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     'nuxt-swiper',
     '@morev/vue-transitions/nuxt',
+    '@nuxtjs/leaflet',
   ],
 
   css: ['~/assets/css/main.css'],
