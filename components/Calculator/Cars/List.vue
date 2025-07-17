@@ -52,11 +52,9 @@ const loaded = ref(false);
 
 <style scoped lang="scss">
 .cars-list {
-  min-width: 730px;
-
   &__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     margin-top: 16px;
     gap: 8px;
     max-height: 500px;

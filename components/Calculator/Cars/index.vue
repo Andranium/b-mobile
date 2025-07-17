@@ -1,5 +1,5 @@
 <template>
-  <UPopover v-model:open="open">
+  <UModal>
     <CalculatorSelector
         placeholder="Машина"
         :value="car"
@@ -9,7 +9,7 @@
     <template #content>
       <CalculatorCarsList @car-select="carSelect" />
     </template>
-  </UPopover>
+  </UModal>
 </template>
 
 <script setup lang="ts">
