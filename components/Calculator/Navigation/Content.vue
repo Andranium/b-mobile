@@ -87,6 +87,8 @@ import { OFFICES } from '../constants';
 
 const emits = defineEmits(["update:navigation"]);
 
+const { close } = defineProps<{ close: () => void }>();
+
 const outside = ref(false);
 
 const office = ref(0);
@@ -133,6 +135,8 @@ const saveDistance = () => {
     destination: selectedAddress.value,
     distance: distance.value,
   });
+
+  close();
 }
 </script>
 

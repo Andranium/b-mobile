@@ -76,6 +76,6 @@ export interface Waypoint {
 
 export interface NavigationObject {
     office: OfficeObject,
-    destination: LocationItem[],
+    destination: LocationItem,
     distance: number,
 }

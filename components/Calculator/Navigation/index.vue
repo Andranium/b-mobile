@@ -1,13 +1,15 @@
 <template>
-  <UModal>
+  <UModal v-model:open="model">
     <CalculatorSelector
         placeholder="Маршрут"
         :value="distance"
+        @clear-data="navigation = null"
     />
 
-    <template #content>
+    <template #content="{ close }">
       <CalculatorNavigationContent
-          @update:navigation="navigation = $event"
+          :close="close"
+          @update:navigation="saveNavigation"
       />
     </template>
   </UModal>
@@ -18,13 +20,19 @@ import type { NavigationObject } from "~/components/Calculator/types";
 
 const navigation = ref<NavigationObject | null>(null);
 
+const model = ref(false);
+
 const distance = computed(() => {
   if (!navigation.value) {
     return '';
   }
 
-  return navigation.value.distance + ' км';
+  return `${navigation.value.office.city} - ${navigation.value.destination.name} | ${navigation.value.distance} км`;
 });
+
+const saveNavigation = (navigationObject: NavigationObject | null) => {
+  navigation.value = navigationObject;
+}
 </script>
 
 <style scoped lang="scss">

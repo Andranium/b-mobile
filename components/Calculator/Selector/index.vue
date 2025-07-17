@@ -4,13 +4,13 @@
       :class="{ 'calculator-selector--active': value }"
   >
     <div class="calculator-selector__content">
-      <div class="calculator-selector__placeholder">
+      <div class="calculator-selector__placeholder line-clamp">
         {{ placeholder }}
       </div>
 
       <div
           v-show="value"
-          class="calculator-selector__value"
+          class="calculator-selector__value line-clamp"
       >
         {{ value }}
       </div>
