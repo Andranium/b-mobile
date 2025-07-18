@@ -8,7 +8,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "lintfix": "eslint . --fix"
+    "lintfix": "eslint . --fix && prettier --write --list-different ."
   },
   "dependencies": {
     "@morev/vue-transitions": "^3.0.5",
@@ -29,5 +29,8 @@
     "vue": "^3.5.17",
     "vue-router": "^4.5.1",
     "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
   }
 }

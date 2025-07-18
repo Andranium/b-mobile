@@ -1,21 +1,19 @@
 <template>
   <UModal v-model:open="model">
     <CalculatorSelector
-        placeholder="Маршрут"
-        :value="distance"
-        @clear-data="clearNavigation"
+      placeholder="Маршрут"
+      :value="distance"
+      @clear-data="clearNavigation"
     />
 
     <template #content="{ close }">
-      <CalculatorNavigationContent
-          :close="close"
-      />
+      <CalculatorNavigationContent :close="close" />
     </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
-import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
+import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
 
 const calculatorStore = useCalculatorStore();
 
@@ -31,8 +29,7 @@ const distance = computed(() => {
 
 const clearNavigation = () => {
   calculatorStore.navigation = null;
-}
+};
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

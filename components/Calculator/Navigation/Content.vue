@@ -6,9 +6,9 @@
 
     <div class="navigation-content__main">
       <USwitch
-          v-model="calculatorStore.outside"
-          label="Поеду за пределы региона выдачи"
-          size="xl"
+        v-model="calculatorStore.outside"
+        label="Поеду за пределы региона выдачи"
+        size="xl"
       />
 
       <CalculatorNavigationOffice />
@@ -16,28 +16,24 @@
       <CalculatorNavigationRoute />
 
       <CalculatorMap
-          :office-coords="selectedOffice.coords"
-          :destination-coords="destinationCoords"
+        :office-coords="selectedOffice.coords"
+        :destination-coords="destinationCoords"
       />
     </div>
 
     <template #footer>
       <div class="navigation-content__footer">
-        <UButton variant="soft" color="secondary">
-          Закрыть
-        </UButton>
+        <UButton variant="soft" color="secondary"> Закрыть </UButton>
 
-        <UButton @click="saveDistance">
-          Сохранить маршрут
-        </UButton>
+        <UButton @click="saveDistance"> Сохранить маршрут </UButton>
       </div>
     </template>
   </UCard>
 </template>
 
 <script setup lang="ts">
-import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
-import {OFFICES} from "~/components/Calculator/constants";
+import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
+import { OFFICES } from '~/components/Calculator/constants';
 
 const calculatorStore = useCalculatorStore();
 
@@ -52,7 +48,10 @@ const destinationCoords = computed<[number, number] | undefined>(() => {
     return;
   }
 
-  return [calculatorStore.selectedAddress.lat, calculatorStore.selectedAddress.lon];
+  return [
+    calculatorStore.selectedAddress.lat,
+    calculatorStore.selectedAddress.lon,
+  ];
 });
 
 const saveDistance = () => {
@@ -60,10 +59,10 @@ const saveDistance = () => {
     office: selectedOffice.value,
     destination: calculatorStore.selectedAddress,
     distance: calculatorStore.distance,
-  }
+  };
 
   close();
-}
+};
 </script>
 
 <style scoped lang="scss">

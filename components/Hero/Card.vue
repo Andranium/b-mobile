@@ -4,15 +4,15 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .hero-card {
   flex: 1;
   aspect-ratio: 16 / 7;
-  background: url('@/assets/image/rent-a-car_bg.png') no-repeat bottom right, radial-gradient(#003699 0, #003566 100%);
+  background:
+    url('@/assets/image/rent-a-car_bg.png') no-repeat bottom right,
+    radial-gradient(#003699 0, #003566 100%);
   background-size: 65%, contain;
   border-radius: 1rem;
   padding: 2rem;

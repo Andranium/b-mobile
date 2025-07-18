@@ -5,33 +5,24 @@
     </template>
 
     <UInput
-        v-model="carQuery"
-        placeholder="Поиск..."
-        class="w-full"
-        size="xl"
+      v-model="carQuery"
+      placeholder="Поиск..."
+      class="w-full"
+      size="xl"
     />
 
-    <transition-fade
-        as="div"
-        class="cars-list__grid"
-        mode="in-out"
-        group
-    >
+    <transition-fade as="div" class="cars-list__grid" mode="in-out" group>
       <template v-if="!loaded">
-        <div
-            v-for="n in 6"
-            :key="n"
-            class="cars-list__loader"
-        >
+        <div v-for="n in 6" :key="n" class="cars-list__loader">
           <USkeleton class="w-full h-full" />
         </div>
       </template>
 
       <template v-else>
         <CalculatorCarsItem
-            v-for="n in 8"
-            :key="n"
-            @click="selectCar('Lexus')"
+          v-for="n in 8"
+          :key="n"
+          @click="selectCar('Lexus')"
         />
       </template>
     </transition-fade>
@@ -41,8 +32,8 @@
 </template>
 
 <script setup lang="ts">
-import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
-import { TransitionFade } from "@morev/vue-transitions";
+import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
+import { TransitionFade } from '@morev/vue-transitions';
 
 const calculatorStore = useCalculatorStore();
 
@@ -52,7 +43,7 @@ const loaded = ref(false);
 
 const selectCar = (car: string) => {
   calculatorStore.car = car;
-}
+};
 </script>
 
 <style scoped lang="scss">

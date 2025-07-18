@@ -1,34 +1,30 @@
 <template>
   <header class="header p-4 lg:pr-8">
-    <UNavigationMenu
-        color="primary" variant="pill" :items="items"
-    />
+    <UNavigationMenu color="primary" variant="pill" :items="items" />
 
-    <UButton size="lg" class="ml-auto">
-      Войти
-    </UButton>
+    <UButton size="lg" class="ml-auto"> Войти </UButton>
   </header>
 </template>
 
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui'
+import type { NavigationMenuItem } from '@nuxt/ui';
 
 const items = ref<NavigationMenuItem[][]>([
   [
     {
       label: 'Главная',
-      to: '/'
+      to: '/',
     },
     {
       label: 'Автопарк',
-      to: '/cars'
+      to: '/cars',
     },
     {
       label: 'О нас',
       to: '/about',
-    }
+    },
   ],
-])
+]);
 </script>
 
 <style scoped lang="scss">

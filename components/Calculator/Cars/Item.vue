@@ -1,7 +1,5 @@
 <template>
-  <div
-      class="calculator-cars-item"
-  >
+  <div class="calculator-cars-item">
     <div class="calculator-cars-item__info">
       <div class="font-bold">Lexus RX 300t</div>
 
@@ -10,9 +8,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .calculator-cars-item {

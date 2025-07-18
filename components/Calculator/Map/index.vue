@@ -2,44 +2,38 @@
   <div class="map shadow">
     <client-only>
       <LMap
-          ref="map"
-          :zoom="zoom"
-          :min-zoom="4"
-          :center="officeCoords"
-          :use-global-leaflet="false"
-          :max-bounds="[
-            [41.1851, 19.6389],
-            [82.0586, 180.0]
-          ]"
+        ref="map"
+        :zoom="zoom"
+        :min-zoom="4"
+        :center="officeCoords"
+        :use-global-leaflet="false"
+        :max-bounds="[
+          [41.1851, 19.6389],
+          [82.0586, 180.0],
+        ]"
       >
         <LTileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            layer-type="base"
-            name="OpenStreetMap"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          layer-type="base"
+          name="OpenStreetMap"
         />
 
-        <LMarker
-            :lat-lng="officeCoords"
-        />
+        <LMarker :lat-lng="officeCoords" />
 
-        <LMarker
-          v-if="destinationCoords"
-          :lat-lng="destinationCoords"
-        />
+        <LMarker v-if="destinationCoords" :lat-lng="destinationCoords" />
 
-        <LPolyline
-            v-if="route"
-            :lat-lngs="route"
-            color="orange"
-        />
+        <LPolyline v-if="route" :lat-lngs="route" color="orange" />
       </LMap>
     </client-only>
   </div>
 </template>
 
 <script setup lang="ts">
-import type {CalculatorMapProps, RoutingNavigation} from "~/components/Calculator/types";
-import {useCalculatorStore} from "~/store/calculator/useCalculatorStore";
+import type {
+  CalculatorMapProps,
+  RoutingNavigation,
+} from '~/components/Calculator/types';
+import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
 
 const calculatorStore = useCalculatorStore();
 
@@ -69,7 +63,7 @@ const fetchRoute = async () => {
   route.value = routeItem.geometry.coordinates.map(([lat, lng]) => [lng, lat]);
 
   calculatorStore.distance = Math.ceil(routeItem.distance / 1000);
-}
+};
 
 const focus = async () => {
   if (!destinationCoords) {
@@ -80,8 +74,11 @@ const focus = async () => {
 
   await fetchRoute();
 
-  map.value?.leafletObject.fitBounds([officeCoords, destinationCoords],  { zoom: 2, padding: [56, 56] });
-}
+  map.value?.leafletObject.fitBounds([officeCoords, destinationCoords], {
+    zoom: 2,
+    padding: [56, 56],
+  });
+};
 
 watch(() => officeCoords, focus);
 

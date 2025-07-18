@@ -1,8 +1,6 @@
 <template>
   <div class="calculator">
-    <h3 class="calculator__title">
-      Калькулятор
-    </h3>
+    <h3 class="calculator__title">Калькулятор</h3>
 
     <div class="calculator__wrapper">
       <div class="calculator__row">
@@ -20,9 +18,7 @@
   </div>
 </template>
 
-
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .calculator {

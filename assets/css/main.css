@@ -1,19 +1,19 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
 @theme static {
-    --light-gray: #F4F4F4;
+  --light-gray: #f4f4f4;
 
-    --color-primary: #FFC300;
-    --color-secondary: #001D3D;
-    --color-neutral: var(--light-gray);
+  --color-primary: #ffc300;
+  --color-secondary: #001d3d;
+  --color-neutral: var(--light-gray);
 
-    --color-light-primary: rgba(255, 195, 0, 0.05);
+  --color-light-primary: rgba(255, 195, 0, 0.05);
 
-    --color-border: #EAEAEA;
+  --color-border: #eaeaea;
 }
 
 .main-title {
-    font-size: 48px;
-    font-weight: 600;
+  font-size: 48px;
+  font-weight: 600;
 }
