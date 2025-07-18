@@ -6,24 +6,21 @@ export const useCalculatorStore = defineStore('calculator-store', () => {
     const car = ref();
     const navigation = ref<NavigationObject | null>(null);
 
-    const clearDate = () => {
-        date.value = undefined;
-    }
+    const office = ref(0);
 
-    const clearSelectedCar = () => {
-        car.value = ''
-    }
+    const outside = ref(false);
 
-    const clearNavigation = () => {
-        navigation.value = null;
-    }
+    const distance = ref(0);
+
+    const selectedAddress = ref();
 
     return {
         date,
         car,
         navigation,
-        clearDate,
-        clearSelectedCar,
-        clearNavigation
+        outside,
+        office,
+        selectedAddress,
+        distance
     }
 });

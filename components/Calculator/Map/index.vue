@@ -39,14 +39,14 @@
 
 <script setup lang="ts">
 import type {CalculatorMapProps, RoutingNavigation} from "~/components/Calculator/types";
+import {useCalculatorStore} from "~/store/calculator/useCalculatorStore";
+
+const calculatorStore = useCalculatorStore();
 
 const zoom = ref(13);
 const map = ref();
 
 const route = ref();
-const distance = ref(0);
-
-const emits = defineEmits(['update:distance']);
 
 const { officeCoords, destinationCoords } = defineProps<CalculatorMapProps>();
 
@@ -67,9 +67,8 @@ const fetchRoute = async () => {
   const routeItem = response.routes[0];
 
   route.value = routeItem.geometry.coordinates.map(([lat, lng]) => [lng, lat]);
-  distance.value = routeItem.distance / 1000;
 
-  emits('update:distance', Math.ceil(distance.value));
+  calculatorStore.distance = Math.ceil(routeItem.distance / 1000);
 }
 
 const focus = async () => {

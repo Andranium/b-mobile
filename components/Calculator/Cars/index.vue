@@ -3,7 +3,7 @@
     <CalculatorSelector
         placeholder="Машина"
         :value="selectedCar"
-        @clear-data="calculatorStore.clearSelectedCar"
+        @clear-data="clearCar"
     />
 
     <template #content>
@@ -20,6 +20,10 @@ const calculatorStore = useCalculatorStore();
 const selectedCar = computed(() => {
   return calculatorStore.car;
 });
+
+const clearCar = () => {
+  calculatorStore.car = ''
+}
 </script>
 
 <style scoped lang="scss">

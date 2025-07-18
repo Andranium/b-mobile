@@ -3,7 +3,7 @@
     <CalculatorSelector
         placeholder="Дата"
         :value="dateRange"
-        @clear-data="calculatorStore.clearDate"
+        @clear-data="clearDate"
     />
 
     <template #content>
@@ -47,6 +47,10 @@ const dateRange = computed(() => {
 
   return `${dateFormatter(calculatorStore.date.start)} - ${dateFormatter(calculatorStore.date.end)}`;
 });
+
+const clearDate = () => {
+  calculatorStore.date = undefined
+}
 </script>
 
 <style scoped lang="scss">

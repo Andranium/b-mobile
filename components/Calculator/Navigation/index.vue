@@ -3,7 +3,7 @@
     <CalculatorSelector
         placeholder="Маршрут"
         :value="distance"
-        @clear-data="calculatorStore.clearNavigation"
+        @clear-data="clearNavigation"
     />
 
     <template #content="{ close }">
@@ -28,6 +28,10 @@ const distance = computed(() => {
 
   return `${calculatorStore.navigation.office.city} - ${calculatorStore.navigation.destination.name} | ${calculatorStore.navigation.distance} км`;
 });
+
+const clearNavigation = () => {
+  calculatorStore.navigation = null;
+}
 </script>
 
 <style scoped lang="scss">
