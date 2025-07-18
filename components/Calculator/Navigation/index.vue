@@ -3,36 +3,31 @@
     <CalculatorSelector
         placeholder="Маршрут"
         :value="distance"
-        @clear-data="navigation = null"
+        @clear-data="calculatorStore.clearNavigation"
     />
 
     <template #content="{ close }">
       <CalculatorNavigationContent
           :close="close"
-          @update:navigation="saveNavigation"
       />
     </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
-import type { NavigationObject } from "~/components/Calculator/types";
+import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
 
-const navigation = ref<NavigationObject | null>(null);
+const calculatorStore = useCalculatorStore();
 
 const model = ref(false);
 
 const distance = computed(() => {
-  if (!navigation.value) {
+  if (!calculatorStore.navigation) {
     return '';
   }
 
-  return `${navigation.value.office.city} - ${navigation.value.destination.name} | ${navigation.value.distance} км`;
+  return `${calculatorStore.navigation.office.city} - ${calculatorStore.navigation.destination.name} | ${calculatorStore.navigation.distance} км`;
 });
-
-const saveNavigation = (navigationObject: NavigationObject | null) => {
-  navigation.value = navigationObject;
-}
 </script>
 
 <style scoped lang="scss">

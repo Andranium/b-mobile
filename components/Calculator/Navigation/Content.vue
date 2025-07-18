@@ -80,12 +80,13 @@
 </template>
 
 <script setup lang="ts">
+import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
 import { debounce } from "@morev/utils";
 import type { LocationItem } from "~/components/Calculator/types";
 
 import { OFFICES } from '../constants';
 
-const emits = defineEmits(["update:navigation"]);
+const calculatorStore = useCalculatorStore();
 
 const { close } = defineProps<{ close: () => void }>();
 
@@ -130,11 +131,11 @@ const { data: location, status } = useFetch<LocationItem[]>('/api/getAddress', {
 });
 
 const saveDistance = () => {
-  emits('update:navigation', {
+  calculatorStore.navigation = {
     office: selectedOffice.value,
     destination: selectedAddress.value,
     distance: distance.value,
-  });
+  }
 
   close();
 }
