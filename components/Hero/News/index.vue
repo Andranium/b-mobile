@@ -25,7 +25,7 @@
 <script setup lang="ts">
 const news = ref();
 
-const swiper = useSwiper(news, {
+useSwiper(news, {
   effect: 'fade',
   loop: true,
   spaceBetween: 16,
@@ -45,10 +45,6 @@ const swiper = useSwiper(news, {
     }
     `,
   ],
-});
-
-onMounted(() => {
-  console.log(swiper.instance);
 });
 </script>
 

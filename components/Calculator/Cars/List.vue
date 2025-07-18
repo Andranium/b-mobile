@@ -31,7 +31,7 @@
         <CalculatorCarsItem
             v-for="n in 8"
             :key="n"
-            @click="emits('carSelect', 'car')"
+            @click="selectCar('Lexus')"
         />
       </template>
     </transition-fade>
@@ -41,13 +41,18 @@
 </template>
 
 <script setup lang="ts">
-import {TransitionFade} from "@morev/vue-transitions";
+import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
+import { TransitionFade } from "@morev/vue-transitions";
+
+const calculatorStore = useCalculatorStore();
 
 const carQuery = '';
 
-const emits = defineEmits(['carSelect']);
-
 const loaded = ref(false);
+
+const selectCar = (car: string) => {
+  calculatorStore.car = car;
+}
 </script>
 
 <style scoped lang="scss">

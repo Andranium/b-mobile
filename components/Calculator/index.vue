@@ -5,18 +5,23 @@
     </h3>
 
     <div class="calculator__wrapper">
-      <CalculatorDate />
+      <div class="calculator__row">
+        <CalculatorDate />
 
-      <CalculatorCars />
+        <CalculatorCars />
 
-      <CalculatorNavigation />
+        <CalculatorNavigation />
+      </div>
+
+      <div class="calculator__row">
+        <CalculatorResults />
+      </div>
     </div>
   </div>
 </template>
 
 
 <script setup lang="ts">
-
 </script>
 
 <style scoped lang="scss">
@@ -32,6 +37,12 @@
   }
 
   &__wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  &__row {
     display: flex;
     gap: 8px;
   }

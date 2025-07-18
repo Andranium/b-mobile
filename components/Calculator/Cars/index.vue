@@ -2,30 +2,24 @@
   <UModal>
     <CalculatorSelector
         placeholder="Машина"
-        :value="car"
-        @clear-data="clearSelectedCar"
+        :value="selectedCar"
+        @clear-data="calculatorStore.clearSelectedCar"
     />
 
     <template #content>
-      <CalculatorCarsList @car-select="carSelect" />
+      <CalculatorCarsList />
     </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
-const car = ref('');
+import { useCalculatorStore } from "~/store/calculator/useCalculatorStore";
 
-const open = ref(false);
+const calculatorStore = useCalculatorStore();
 
-const clearSelectedCar = () => {
-  car.value = ''
-}
-
-const carSelect = (selectedCar: string) => {
-  car.value = selectedCar;
-
-  open.value = false;
-}
+const selectedCar = computed(() => {
+  return calculatorStore.car;
+});
 </script>
 
 <style scoped lang="scss">

@@ -2,14 +2,15 @@
 @import "@nuxt/ui";
 
 @theme static {
+    --light-gray: #F4F4F4;
+
     --color-primary: #FFC300;
     --color-secondary: #001D3D;
+    --color-neutral: var(--light-gray);
 
     --color-light-primary: rgba(255, 195, 0, 0.05);
 
     --color-border: #EAEAEA;
-
-    --light-gray: #F4F4F4;
 }
 
 .main-title {
