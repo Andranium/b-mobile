@@ -1,18 +1,14 @@
 <template>
   <aside class="aside p-4">
     <div class="aside__logo">
-      <div class="logo">
-        B
-      </div>
+      <div class="logo">B</div>
     </div>
 
     <SidebarNavigation />
   </aside>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .aside {

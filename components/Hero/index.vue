@@ -1,22 +1,26 @@
 <template>
   <div class="hero">
-    <HeroCard />
+    <div class="hero__cards">
+      <HeroCard />
 
-    <HeroNews />
+      <HeroNews />
+    </div>
+
+    <Calculator class="mt-12" />
   </div>
 </template>
 
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .hero {
-  display: flex;
-  gap: 24px;
+  &__cards {
+    display: flex;
+    gap: 24px;
 
-  @media (max-width: 48rem) {
-    flex-direction: column;
+    @media (max-width: 48rem) {
+      flex-direction: column;
+    }
   }
 }
 </style>

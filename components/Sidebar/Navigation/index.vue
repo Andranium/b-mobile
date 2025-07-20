@@ -1,39 +1,39 @@
 <template>
   <nav class="navigation">
     <UTooltip
-        v-for="(item, i) in items"
-        :key="item.icon"
-        :text="item.tooltip"
-        :content="{
-          align: 'center',
-          side: 'right',
-          sideOffset: 8
-        }"
+      v-for="(item, i) in items"
+      :key="item.icon"
+      :text="item.tooltip"
+      :content="{
+        align: 'center',
+        side: 'right',
+        sideOffset: 8,
+      }"
     >
       <UButton
-          class="navigation__item"
-          size="xl"
-          :icon="`material-symbols:${item.icon}`"
-          :color="i === 0 ? 'primary' : 'secondary'"
-          variant="ghost"
+        class="navigation__item"
+        size="xl"
+        :icon="`material-symbols:${item.icon}`"
+        :color="i === 0 ? 'primary' : 'secondary'"
+        variant="ghost"
       />
     </UTooltip>
 
     <UTooltip
-        class="mt-auto"
-        text="Тех. поддержка"
-        :content="{
-          align: 'center',
-          side: 'right',
-          sideOffset: 8
-        }"
+      class="mt-auto"
+      text="Тех. поддержка"
+      :content="{
+        align: 'center',
+        side: 'right',
+        sideOffset: 8,
+      }"
     >
       <UButton
-          class="navigation__item"
-          size="xl"
-          icon="material-symbols:support-agent-rounded"
-          color="secondary"
-          variant="ghost"
+        class="navigation__item"
+        size="xl"
+        icon="material-symbols:support-agent-rounded"
+        color="secondary"
+        variant="ghost"
       />
     </UTooltip>
   </nav>
@@ -43,14 +43,14 @@
 const items = [
   {
     icon: 'percent-rounded',
-    tooltip: 'Новости и акции'
+    tooltip: 'Новости и акции',
   },
 
   {
     icon: 'directions-car-outline-rounded',
-    tooltip: 'Список машин'
-  }
-]
+    tooltip: 'Список машин',
+  },
+];
 </script>
 
 <style scoped lang="scss">

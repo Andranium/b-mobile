@@ -10,6 +10,9 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/image',
     'nuxt-swiper',
+    '@morev/vue-transitions/nuxt',
+    '@nuxtjs/leaflet',
+    '@pinia/nuxt',
   ],
 
   css: ['~/assets/css/main.css'],
@@ -17,4 +20,4 @@ export default defineNuxtConfig({
   icon: {
     cssLayer: 'components',
   },
-})
+});
