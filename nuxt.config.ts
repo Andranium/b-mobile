@@ -13,11 +13,22 @@ export default defineNuxtConfig({
     '@morev/vue-transitions/nuxt',
     '@nuxtjs/leaflet',
     '@pinia/nuxt',
+    'nuxt-auth-utils',
   ],
 
   css: ['~/assets/css/main.css'],
 
   icon: {
     cssLayer: 'components',
+  },
+
+  runtimeConfig: {
+    session: {
+      name: 'b-mobile',
+      password: process.env.NUXT_SESSION_PASSWORD!,
+      cookie: {
+        secure: false,
+      },
+    },
   },
 });

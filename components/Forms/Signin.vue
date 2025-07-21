@@ -36,9 +36,20 @@
       </UForm>
 
       <template #footer>
-        <UButton size="lg" color="primary" @click="signinUser"> Войти </UButton>
+        <div class="sign-in__footer">
+          <UButton
+              size="lg"
+              color="primary"
+              :loading="userAccess.loading.value"
+              @click="signinUser"
+          >
+            Войти
+          </UButton>
 
-        <ULink class="ml-2"> Забыл пароль </ULink>
+          <ULink class="ml-2"> Забыл пароль </ULink>
+
+          <ULink to="signup" class="ml-auto">Создать аккаунт</ULink>
+        </div>
       </template>
     </UCard>
   </div>
@@ -47,7 +58,6 @@
 <script setup lang="ts">
 import { phoneMask } from '~/utils';
 import { signInForm } from '~/schemas';
-import type { InferType } from 'yup';
 import type { SigninUser } from '~/components/Forms/types';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
@@ -55,11 +65,9 @@ const schema = signInForm;
 
 const form = ref();
 
-type Schema = InferType<typeof schema>;
-
 const signinUser = () => form.value.submit();
 
-const userAccess = useUserAccess<Schema>();
+const userAccess = useUserAccess();
 
 const state = reactive<SigninUser>({
   phone: '',
@@ -77,6 +85,11 @@ const state = reactive<SigninUser>({
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

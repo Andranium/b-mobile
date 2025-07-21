@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-up bg-primary">
+  <div class="sign-up">
     <FormsSignup />
   </div>
 </template>

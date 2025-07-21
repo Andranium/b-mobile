@@ -1,9 +1,15 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
 
-export const useUserAccess = <T>() => {
+export const useUserAccess = () => {
   const toast = useToast();
 
-  const userSignup = (event: FormSubmitEvent<T>) => {
+  const loading = ref(false);
+
+  const { fetch } = useUserSession();
+
+  const router = useRouter();
+
+  const userSignup = (event: FormSubmitEvent<unknown>) => {
     toast.add({
       title: 'Добро пожаловать',
       description: 'Ваш аккаунт создан.',
@@ -13,18 +19,38 @@ export const useUserAccess = <T>() => {
     console.log(event.data);
   };
 
-  const userSignin = (event: FormSubmitEvent<T>) => {
-    toast.add({
-      title: 'Добро пожаловать',
-      description: 'Вы успешно зашли в аккаунт.',
-      color: 'primary',
-    });
+  const userSignin = async (
+    event: FormSubmitEvent<{ phone: string; password: string }>,
+  ) => {
+    try {
+      loading.value = true;
 
-    console.log(event.data);
+      await $fetch('/api/auth/login', {
+        method: 'post',
+        body: event.data,
+      });
+
+      await fetch();
+
+      await router.push('/');
+    } catch (error) {
+      console.error(error);
+
+      toast.add({
+        title: 'Не удалось войти',
+        description:
+          'Похоже, логин или пароль введены неверно. Пожалуйста, проверьте данные или воспользуйтесь восстановлением пароля.',
+        color: 'warning',
+        duration: 5000,
+      });
+    } finally {
+      loading.value = false;
+    }
   };
 
   return {
     userSignup,
     userSignin,
+    loading,
   };
 };

@@ -1,0 +1,43 @@
+import type { LoginResponse } from '~/server/types';
+
+export default defineEventHandler(async (event) => {
+  try {
+    const body = await readBody(event);
+
+    const phone = body.phone.replace(/[()\s-]/g, '');
+
+    const response = await $fetch<LoginResponse>(
+      'https://cors-anywhere.herokuapp.com/http://45.12.236.212:8000/auth/login',
+      {
+        method: 'post',
+        headers: {
+          origin: '45.12.236.212:8000',
+        },
+        body: {
+          phone,
+          password: body.password,
+        },
+      },
+    );
+
+    const user = await $fetch(
+      'https://cors-anywhere.herokuapp.com/http://45.12.236.212:8000/users/me',
+      {
+        headers: {
+          origin: '45.12.236.212:8000',
+          Authorization: `Bearer ${response.access_token}`,
+        },
+      },
+    );
+
+    await setUserSession(event, {
+      user,
+      access_token: response.access_token,
+      refresh_token: response.refresh_token,
+    });
+
+    return { success: true };
+  } catch (e) {
+    return e;
+  }
+});
