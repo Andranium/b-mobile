@@ -1,13 +1,17 @@
 import type { LoginResponse } from '~/server/types';
 
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
+
+  const baseApi = config.public.baseApi;
+
   try {
     const body = await readBody(event);
 
     const phone = body.phone.replace(/[()\s-]/g, '');
 
     const response = await $fetch<LoginResponse>(
-      'https://cors-anywhere.herokuapp.com/http://45.12.236.212:8000/auth/login',
+      `${baseApi}/auth/login`,
       {
         method: 'post',
         headers: {
@@ -21,7 +25,7 @@ export default defineEventHandler(async (event) => {
     );
 
     const user = await $fetch(
-      'https://cors-anywhere.herokuapp.com/http://45.12.236.212:8000/users/me',
+      `${baseApi}/users/me`,
       {
         headers: {
           origin: '45.12.236.212:8000',

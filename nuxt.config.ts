@@ -23,6 +23,9 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    public: {
+      baseApi: process.env.BASE_API,
+    },
     session: {
       name: 'b-mobile',
       password: process.env.NUXT_SESSION_PASSWORD!,
