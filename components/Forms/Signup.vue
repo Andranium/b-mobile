@@ -5,59 +5,87 @@
         <div class="font-bold">Регистрация</div>
       </template>
 
-      <UForm
-        ref="form"
-        :schema="schema"
-        :state="state"
-        class="sign-up__form"
-        @submit="userAccess.userSignup"
-      >
-        <UFormField label="Ваше имя" name="name">
-          <UInput
-            v-model="state.name"
-            variant="soft"
-            size="xl"
-            class="w-full"
-            placeholder="Иван"
-          />
-        </UFormField>
+      <TransitionFade mode="out-in">
+        <div
+            v-if="userAccess.registrationConfirm.value"
+            class="sign-up__confirm"
+        >
+          <p>Для завершения регистрации введите код, который мы отправили на ваш номер. Это поможет нам убедиться, что вы — это вы, и защитить ваш аккаунт.</p>
 
-        <UFormField label="Телефон" name="phone">
-          <UInput
-            v-model="state.phone"
-            v-maska="phoneMask"
-            variant="soft"
-            size="xl"
-            class="w-full"
-            placeholder="+7 (999) 999-99-99"
-          />
-        </UFormField>
+          <p>Код отправлен на: <strong>{{ state.phone }}</strong></p>
 
-        <UFormField label="Пароль" name="password">
-          <UInput
-            v-model="state.password"
-            variant="soft"
-            size="xl"
-            class="w-full"
-            type="password"
-            placeholder="*********"
-          />
-        </UFormField>
-      </UForm>
+          <UPinInput @complete="confirmCode" length="4" otp />
+
+          <p>Пожалуйста, проверьте SMS и введите код.</p>
+
+          <ULink disabled>запросите новый код</ULink>
+        </div>
+
+        <UForm
+            v-else
+            ref="form"
+            :schema="schema"
+            :state="state"
+            class="sign-up__form"
+            @submit="userAccess.sendCode"
+        >
+          <UFormField label="Ваше имя" name="name">
+            <UInput
+                v-model="state.name"
+                variant="soft"
+                size="xl"
+                class="w-full"
+                placeholder="Иван"
+            />
+          </UFormField>
+
+          <UFormField label="Телефон" name="phone">
+            <UInput
+                v-model="state.phone"
+                v-maska="phoneMask"
+                variant="soft"
+                size="xl"
+                class="w-full"
+                placeholder="+7 (999) 999-99-99"
+            />
+          </UFormField>
+
+          <UFormField label="Пароль" name="password">
+            <UInput
+                v-model="state.password"
+                variant="soft"
+                size="xl"
+                class="w-full"
+                type="password"
+                placeholder="*********"
+            />
+          </UFormField>
+        </UForm>
+      </TransitionFade>
 
       <template #footer>
-        <UButton size="lg" color="primary" @click="signupUser">
-          Регистрация
-        </UButton>
+        <TransitionFade mode="out-in">
+          <div
+              v-if="!userAccess.registrationConfirm.value"
+              class="sign-up__footer"
+          >
+            <UButton :loading="userAccess.loading.value" size="lg" color="primary" @click="signupUser">
+              Регистрация
+            </UButton>
 
-        <ULink class="ml-2" to="/signin"> Есть аккаунт </ULink>
+            <ULink class="ml-2" to="/signin"> Есть аккаунт </ULink>
+          </div>
+
+          <div class="sign-up__footer">
+            <UButton size="lg" variant="soft" color="secondary" @click="goBack">Назад</UButton>
+          </div>
+        </TransitionFade>
       </template>
     </UCard>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { InferType } from 'yup';
 import type { SignupUserData } from '~/components/Forms/types';
 import { signUpForm } from '~/schemas';
 import { phoneMask } from '~/utils';
@@ -65,9 +93,11 @@ import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
 const schema = signUpForm;
 
-type Schema = InferType<typeof schema>;
+const goBack = () => {
+  userAccess.registrationConfirm.value = false
+};
 
-const userAccess = useUserAccess<Schema>();
+const userAccess = useUserAccess();
 
 const form = ref();
 
@@ -78,6 +108,13 @@ const state = reactive<SignupUserData>({
   phone: '',
   password: '',
 });
+
+const confirmCode = (code: string[]) => {
+  userAccess.confirmCode({
+    ...state,
+    code: code.join('')
+  });
+}
 </script>
 
 <style scoped lang="scss">
@@ -90,6 +127,18 @@ const state = reactive<SignupUserData>({
     display: flex;
     flex-direction: column;
     gap: 16px;
+  }
+
+  &__confirm {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

@@ -24,7 +24,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      baseApi: process.env.BASE_API,
+      baseApi: process.env.NUXT_BASE_API,
     },
     session: {
       name: 'b-mobile',
