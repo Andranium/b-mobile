@@ -1,5 +1,5 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
-import type {UserBase, UserRegistration} from "~/composables/Forms/types";
+import type { UserBase, UserRegistration } from '~/composables/Forms/types';
 
 export const useUserAccess = () => {
   const toast = useToast();
@@ -13,15 +13,19 @@ export const useUserAccess = () => {
 
   const errorHandler = (error: unknown) => {
     const errorTexts = {
-      title: "Не удалось выполнить запрос",
-      description: "Пожалуйста, попробуйте снова через несколько минут. Если проблема сохраняется, обратитесь в поддержку."
-    }
+      title: 'Не удалось выполнить запрос',
+      description:
+        'Пожалуйста, попробуйте снова через несколько минут. Если проблема сохраняется, обратитесь в поддержку.',
+    };
 
-    const tooManyRequests = (error as { message: string }).message.includes('429');
+    const tooManyRequests = (error as { message: string }).message.includes(
+      '429',
+    );
 
     if (tooManyRequests) {
       errorTexts.title = 'Слишком много запросов';
-      errorTexts.description = 'Вы отправили слишком много запросов. Пожалуйста, подождите 60 секунд и попробуйте снова. Если проблема сохраняется, обратитесь в поддержку.';
+      errorTexts.description =
+        'Вы отправили слишком много запросов. Пожалуйста, подождите 60 секунд и попробуйте снова. Если проблема сохраняется, обратитесь в поддержку.';
     }
 
     toast.add({
@@ -29,7 +33,7 @@ export const useUserAccess = () => {
       color: 'error',
       duration: 5000,
     });
-  }
+  };
 
   const sendCode = async (event: FormSubmitEvent<UserRegistration>) => {
     try {
@@ -38,8 +42,8 @@ export const useUserAccess = () => {
       await $fetch('/api/auth/sendCode', {
         method: 'post',
         body: {
-          phone: event.data.phone
-        }
+          phone: event.data.phone,
+        },
       });
 
       loading.value = false;
@@ -47,10 +51,10 @@ export const useUserAccess = () => {
 
       toast.add({
         title: 'Код подтверждения отправлен',
-        description: 'Мы отправили код на ваш номер телефона. Проверьте SMS и введите код в поле ниже. Если код не пришел, запросите новый через 60 секунд.',
+        description:
+          'Мы отправили код на ваш номер телефона. Проверьте SMS и введите код в поле ниже. Если код не пришел, запросите новый через 60 секунд.',
         color: 'success',
       });
-
     } catch (error: unknown) {
       errorHandler(error);
     } finally {
@@ -83,7 +87,7 @@ export const useUserAccess = () => {
     try {
       await $fetch('/api/auth/registerUser', {
         method: 'post',
-        body: data
+        body: data,
       });
 
       toast.add({
@@ -94,7 +98,7 @@ export const useUserAccess = () => {
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
   const confirmCode = async (data: UserRegistration & { code: string }) => {
     try {
@@ -104,8 +108,8 @@ export const useUserAccess = () => {
         method: 'post',
         body: {
           phone: data.phone,
-          code: data.code
-        }
+          code: data.code,
+        },
       });
 
       await registerUser(data);
@@ -114,13 +118,13 @@ export const useUserAccess = () => {
     } catch (error) {
       errorHandler(error);
     }
-  }
+  };
 
   return {
     sendCode,
     userSignin,
     confirmCode,
     loading,
-    registrationConfirm
+    registrationConfirm,
   };
 };

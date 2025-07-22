@@ -10,29 +10,23 @@ export default defineEventHandler(async (event) => {
 
     const phone = body.phone.replace(/[()\s-]/g, '');
 
-    const response = await $fetch<LoginResponse>(
-      `${baseApi}/auth/login`,
-      {
-        method: 'post',
-        headers: {
-          origin: '45.12.236.212:8000',
-        },
-        body: {
-          phone,
-          password: body.password,
-        },
+    const response = await $fetch<LoginResponse>(`${baseApi}/auth/login`, {
+      method: 'post',
+      headers: {
+        origin: '45.12.236.212:8000',
       },
-    );
+      body: {
+        phone,
+        password: body.password,
+      },
+    });
 
-    const user = await $fetch(
-      `${baseApi}/users/me`,
-      {
-        headers: {
-          origin: '45.12.236.212:8000',
-          Authorization: `Bearer ${response.access_token}`,
-        },
+    const user = await $fetch(`${baseApi}/users/me`, {
+      headers: {
+        origin: '45.12.236.212:8000',
+        Authorization: `Bearer ${response.access_token}`,
       },
-    );
+    });
 
     await setUserSession(event, {
       user,

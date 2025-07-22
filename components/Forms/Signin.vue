@@ -38,10 +38,10 @@
       <template #footer>
         <div class="sign-in__footer">
           <UButton
-              size="lg"
-              color="primary"
-              :loading="userAccess.loading.value"
-              @click="signinUser"
+            size="lg"
+            color="primary"
+            :loading="userAccess.loading.value"
+            @click="signinUser"
           >
             Войти
           </UButton>
