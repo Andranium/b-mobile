@@ -46,7 +46,6 @@ export const useUserAccess = () => {
         },
       });
 
-      loading.value = false;
       registrationConfirm.value = true;
 
       toast.add({

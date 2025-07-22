@@ -2,7 +2,15 @@
   <div class="sign-up">
     <UCard class="sign-up__card">
       <template #header>
-        <div class="font-bold">Регистрация</div>
+        <div
+          class="font-bold"
+          @click="
+            userAccess.registrationConfirm.value =
+              !userAccess.registrationConfirm.value
+          "
+        >
+          Регистрация
+        </div>
       </template>
 
       <TransitionFade mode="out-in">
