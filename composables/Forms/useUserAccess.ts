@@ -1,4 +1,5 @@
 import type { FormSubmitEvent } from '@nuxt/ui';
+import type {UserBase, UserRegistration} from "~/composables/Forms/types";
 
 export const useUserAccess = () => {
   const toast = useToast();
@@ -10,7 +11,27 @@ export const useUserAccess = () => {
 
   const router = useRouter();
 
-  const sendCode = async (event: FormSubmitEvent<{ phone: string, password: string, name: string }>) => {
+  const errorHandler = (error: unknown) => {
+    const errorTexts = {
+      title: "Не удалось выполнить запрос",
+      description: "Пожалуйста, попробуйте снова через несколько минут. Если проблема сохраняется, обратитесь в поддержку."
+    }
+
+    const tooManyRequests = (error as { message: string }).message.includes('429');
+
+    if (tooManyRequests) {
+      errorTexts.title = 'Слишком много запросов';
+      errorTexts.description = 'Вы отправили слишком много запросов. Пожалуйста, подождите 60 секунд и попробуйте снова. Если проблема сохраняется, обратитесь в поддержку.';
+    }
+
+    toast.add({
+      ...errorTexts,
+      color: 'error',
+      duration: 5000,
+    });
+  }
+
+  const sendCode = async (event: FormSubmitEvent<UserRegistration>) => {
     try {
       loading.value = true;
 
@@ -30,31 +51,15 @@ export const useUserAccess = () => {
         color: 'success',
       });
 
-    } catch (error) {
-      const errorTexts = {
-        title: "Не удалось выполнить запрос",
-        description: "Пожалуйста, попробуйте снова через несколько минут. Если проблема сохраняется, обратитесь в поддержку."
-      }
-
-      const tooManyRequests = (error as { message: string }).message.includes('429');
-
-      if (tooManyRequests) {
-        errorTexts.title = 'Слишком много запросов';
-        errorTexts.description = 'Вы отправили слишком много запросов. Пожалуйста, подождите 60 секунд и попробуйте снова. Если проблема сохраняется, обратитесь в поддержку.';
-      }
-
-      toast.add({
-        ...errorTexts,
-        color: 'error',
-        duration: 5000,
-      });
+    } catch (error: unknown) {
+      errorHandler(error);
     } finally {
       loading.value = false;
     }
   };
 
   const userSignin = async (
-    event: FormSubmitEvent<{ phone: string; password: string }>,
+    event: FormSubmitEvent<UserBase> | { data: UserBase },
   ) => {
     try {
       loading.value = true;
@@ -68,67 +73,46 @@ export const useUserAccess = () => {
 
       await router.push('/');
     } catch (error) {
-      console.error(error);
-
-      toast.add({
-        title: 'Не удалось войти',
-        description:
-          'Похоже, логин или пароль введены неверно. Пожалуйста, проверьте данные или воспользуйтесь восстановлением пароля.',
-        color: 'warning',
-        duration: 5000,
-      });
+      errorHandler(error);
     } finally {
       loading.value = false;
     }
   };
 
-  const confirmCode = async (data: { phone: string, code: string, name: string }) => {
+  const registerUser = async (data: UserRegistration) => {
     try {
-      loading.value = true;
-
-      await $fetch('/api/auth/confirmCode', {
-        method: 'post',
-        body: data
-      });
-
-      console.log(data);
-
       await $fetch('/api/auth/registerUser', {
         method: 'post',
         body: data
       });
 
-      await $fetch(`http://45.12.236.212:8000/auth/registration`, {
-        method: 'post',
-        body: data
-      });
-
-      await $fetch('/api/auth/login', {
-        method: 'post',
-        body: data,
-      });
-
-      await fetch();
-
-      await router.push('/');
-    } catch (error) {
-      const errorTexts = {
-        title: "Не удалось выполнить запрос",
-        description: "Пожалуйста, попробуйте снова через несколько минут. Если проблема сохраняется, обратитесь в поддержку."
-      }
-
-      const tooManyRequests = (error as { message: string }).message.includes('429');
-
-      if (tooManyRequests) {
-        errorTexts.title = 'Слишком много запросов';
-        errorTexts.description = 'Вы отправили слишком много запросов. Пожалуйста, подождите 60 секунд и попробуйте снова. Если проблема сохраняется, обратитесь в поддержку.';
-      }
-
       toast.add({
-        ...errorTexts,
-        color: 'error',
-        duration: 5000,
+        title: 'Добро пожаловать! Ваш аккаунт успешно создан!',
+        description: 'Переводим вас на главную страницу...',
+        color: 'success',
       });
+    } catch (error) {
+      errorHandler(error);
+    }
+  }
+
+  const confirmCode = async (data: UserRegistration & { code: string }) => {
+    try {
+      loading.value = true;
+
+      await $fetch('/api/auth/confirmCode', {
+        method: 'post',
+        body: {
+          phone: data.phone,
+          code: data.code
+        }
+      });
+
+      await registerUser(data);
+
+      await userSignin({ data });
+    } catch (error) {
+      errorHandler(error);
     }
   }
 
