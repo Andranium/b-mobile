@@ -48,16 +48,33 @@
             />
           </UFormField>
 
-          <UFormField label="Пароль" name="password">
+          <UFormField label="Пароль" name="password" :ui="{ error: 'hidden' }">
             <UInput
               v-model="state.password"
               variant="soft"
               size="xl"
               class="w-full"
-              type="password"
+              :type="passwordShown ? 'text' : 'password'"
               placeholder="*********"
-            />
+            >
+              <template #trailing>
+                <UButton
+                    color="neutral"
+                    variant="link"
+                    size="sm"
+                    :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                    :aria-label="passwordShown ? 'Показать пароль' : 'Скрыть пароль'"
+                    :aria-pressed="passwordShown"
+                    aria-controls="password"
+                    @click="passwordShown = !passwordShown"
+                />
+              </template>
+            </UInput>
           </UFormField>
+
+          <FormsSignupPasswordRequirements
+              :password="state.password"
+          />
         </UForm>
       </TransitionFade>
 
@@ -113,6 +130,8 @@ const state = reactive<SignupUserData>({
   phone: '',
   password: '',
 });
+
+const passwordShown = ref(false);
 </script>
 
 <style scoped lang="scss">
