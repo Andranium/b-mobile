@@ -2,20 +2,12 @@
   <div class="sign-up">
     <UCard class="sign-up__card">
       <template #header>
-        <div
-          class="font-bold"
-          @click="
-            userAccess.registrationConfirm.value =
-              !userAccess.registrationConfirm.value
-          "
-        >
-          Регистрация
-        </div>
+        <div class="font-bold">Регистрация</div>
       </template>
 
       <TransitionFade mode="out-in">
         <FormsSignupConfirmCode
-          v-if="userAccess.registrationConfirm.value"
+          v-if="userAccess.codeConfirm.value"
           :state="state"
         />
 
@@ -25,7 +17,7 @@
           :schema="schema"
           :state="state"
           class="sign-up__form"
-          @submit="userAccess.sendCode"
+          @submit="execute"
         >
           <UFormField label="Ваше имя" name="name">
             <UInput
@@ -59,33 +51,30 @@
             >
               <template #trailing>
                 <UButton
-                    color="neutral"
-                    variant="link"
-                    size="sm"
-                    :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                    :aria-label="passwordShown ? 'Показать пароль' : 'Скрыть пароль'"
-                    :aria-pressed="passwordShown"
-                    aria-controls="password"
-                    @click="passwordShown = !passwordShown"
+                  color="neutral"
+                  variant="link"
+                  size="sm"
+                  :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                  :aria-label="
+                    passwordShown ? 'Показать пароль' : 'Скрыть пароль'
+                  "
+                  :aria-pressed="passwordShown"
+                  aria-controls="password"
+                  @click="passwordShown = !passwordShown"
                 />
               </template>
             </UInput>
           </UFormField>
 
-          <FormsSignupPasswordRequirements
-              :password="state.password"
-          />
+          <FormsSignupPasswordRequirements :password="state.password" />
         </UForm>
       </TransitionFade>
 
       <template #footer>
         <TransitionFade mode="out-in">
-          <div
-            v-if="!userAccess.registrationConfirm.value"
-            class="sign-up__footer"
-          >
+          <div v-if="!userAccess.codeConfirm.value" class="sign-up__footer">
             <UButton
-              :loading="userAccess.loading.value"
+              :loading="status === 'pending'"
               size="lg"
               color="primary"
               @click="signupUser"
@@ -116,7 +105,7 @@ import { useUserAccess } from '~/composables/Forms/useUserAccess';
 const schema = signUpForm;
 
 const goBack = () => {
-  userAccess.registrationConfirm.value = false;
+  userAccess.codeConfirm.value = false;
 };
 
 const userAccess = useUserAccess();
@@ -132,6 +121,22 @@ const state = reactive<SignupUserData>({
 });
 
 const passwordShown = ref(false);
+
+const { status, execute } = useFetch('/api/auth/sendCode', {
+  method: 'post',
+  body: computed(() => ({
+    phone: state.phone,
+  })),
+  immediate: false,
+  lazy: true,
+  onResponse({ response }) {
+    if (response.ok) {
+      userAccess.codeConfirm.value = true;
+    } else {
+      userAccess.errorHandler(response.status);
+    }
+  },
+});
 </script>
 
 <style scoped lang="scss">

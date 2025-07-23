@@ -1,11 +1,11 @@
 <template>
   <div class="flex flex-col gap-2">
     <UProgress
-        :color="color"
-        :indicator="text"
-        :model-value="score"
-        :max="2"
-        size="sm"
+      :color="color"
+      :indicator="text"
+      :model-value="score"
+      :max="2"
+      size="sm"
     />
 
     <p id="password-strength" class="text-sm font-medium">
@@ -14,17 +14,22 @@
 
     <ul class="flex flex-col gap-2" aria-label="Требования к паролю">
       <li
-          v-for="(req, index) in strength"
-          :key="index"
-          class="flex items-center gap-1"
-          :class="req.met ? 'text-success' : 'text-muted'"
+        v-for="(req, index) in strength"
+        :key="index"
+        class="flex items-center gap-1"
+        :class="req.met ? 'text-success' : 'text-muted'"
       >
-        <UIcon :name="req.met ? 'i-lucide-circle-check' : 'i-lucide-circle-x'" class="size-4 shrink-0" />
+        <UIcon
+          :name="req.met ? 'i-lucide-circle-check' : 'i-lucide-circle-x'"
+          class="size-4 shrink-0"
+        />
 
         <span class="text-xs">
           {{ req.text }}
           <span class="sr-only">
-            {{ req.met ? ' - Требование выполнено' : ' - Требование не выполнено' }}
+            {{
+              req.met ? ' - Требование выполнено' : ' - Требование не выполнено'
+            }}
           </span>
         </span>
       </li>
@@ -39,27 +44,28 @@ function checkStrength(str: string) {
   const requirements = [
     { regex: /.{8,}/, text: 'Не менее 8 символов' },
     { regex: /\W/, text: 'Хотя бы 1 специальный символ (!?.~)' },
-  ]
+  ];
 
-  return requirements.map(req => ({ met: req.regex.test(str), text: req.text }))
+  return requirements.map((req) => ({
+    met: req.regex.test(str),
+    text: req.text,
+  }));
 }
 
-const strength = computed(() => checkStrength(password))
-const score = computed(() => strength.value.filter(req => req.met).length)
+const strength = computed(() => checkStrength(password));
+const score = computed(() => strength.value.filter((req) => req.met).length);
 
 const color = computed(() => {
-  if (score.value === 0) return 'neutral'
-  if (score.value <= 1) return 'error'
-  return 'success'
-})
+  if (score.value === 0) return 'neutral';
+  if (score.value <= 1) return 'error';
+  return 'success';
+});
 
 const text = computed(() => {
-  if (score.value === 0) return 'Введите пароль'
-  if (score.value <= 1) return 'Слабый пароль'
-  return 'Надежный пароль'
-})
+  if (score.value === 0) return 'Введите пароль';
+  if (score.value <= 1) return 'Слабый пароль';
+  return 'Надежный пароль';
+});
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
