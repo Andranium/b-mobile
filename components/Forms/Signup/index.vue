@@ -2,18 +2,10 @@
   <div class="sign-up">
     <UCard class="sign-up__card">
       <template #header>
-        <div
-          class="font-bold"
-        >
-          Регистрация
-        </div>
+        <div class="font-bold">Регистрация</div>
       </template>
 
       <TransitionFade mode="out-in">
-        <FormsSignupConfirmCode
-          v-if="userAccess.codeConfirmed.value"
-          :state="state"
-        />
 
         <UForm
           v-else
@@ -76,7 +68,7 @@
 
       <template #footer>
         <TransitionFade mode="out-in">
-          <div v-if="!userAccess.codeConfirmed.value" class="sign-up__footer">
+          <div v-if="!userAccess.codeSent.value" class="sign-up__footer">
             <UButton
               :loading="status === 'pending'"
               size="lg"
@@ -102,14 +94,14 @@
 
 <script setup lang="ts">
 import type { SignupUserData } from '~/components/Forms/types';
-import { signUpForm } from '~/schemas';
+import { signUpForm } from '~/utils/schemas';
 import { phoneMask } from '~/utils';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
 const schema = signUpForm;
 
 const goBack = () => {
-  userAccess.codeConfirmed.value = false;
+  userAccess.codeSent.value = false;
 };
 
 const userAccess = useUserAccess();

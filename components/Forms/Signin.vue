@@ -29,9 +29,24 @@
             variant="soft"
             size="xl"
             class="w-full"
-            type="password"
+            :type="passwordShown ? 'text' : 'password'"
             placeholder="*********"
-          />
+          >
+            <template #trailing>
+              <UButton
+                  color="neutral"
+                  variant="link"
+                  size="sm"
+                  :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                  :aria-label="
+                    passwordShown ? 'Показать пароль' : 'Скрыть пароль'
+                  "
+                  :aria-pressed="passwordShown"
+                  aria-controls="password"
+                  @click="passwordShown = !passwordShown"
+              />
+            </template>
+          </UInput>
         </UFormField>
       </UForm>
 
@@ -46,9 +61,9 @@
             Войти
           </UButton>
 
-          <ULink class="ml-2"> Забыл пароль </ULink>
+          <ULink to="/password-recovery" class="ml-2"> Забыл пароль </ULink>
 
-          <ULink to="signup" class="ml-auto">Создать аккаунт</ULink>
+          <ULink to="/signup" class="ml-auto">Создать аккаунт</ULink>
         </div>
       </template>
     </UCard>
@@ -57,11 +72,13 @@
 
 <script setup lang="ts">
 import { phoneMask } from '~/utils';
-import { signInForm } from '~/schemas';
+import { signInForm } from '~/utils/schemas';
 import type { SigninUser } from '~/components/Forms/types';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
 const schema = signInForm;
+
+const passwordShown = ref(false);
 
 const form = ref();
 

@@ -5,6 +5,7 @@ export const useUserAccess = () => {
   const router = useRouter();
   const toast = useToast();
 
+  const codeSent = ref(false);
   const codeConfirmed = ref(false);
 
   const { fetch } = useUserSession();
@@ -61,7 +62,7 @@ export const useUserAccess = () => {
         },
       });
 
-      codeConfirmed.value = true;
+      codeSent.value = true;
 
       toast.add({
         title: 'Код подтверждения отправлен',
@@ -99,6 +100,8 @@ export const useUserAccess = () => {
         },
       });
 
+      codeConfirmed.value = true;
+
       await registerUser(data);
 
       await userSignin(data);
@@ -108,10 +111,11 @@ export const useUserAccess = () => {
   };
 
   return {
+    codeSent,
     codeConfirmed,
     confirmCode,
     errorHandler,
     userSignin,
     sendVerificationCode,
-  }
-}
+  };
+};
