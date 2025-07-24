@@ -6,6 +6,10 @@
       </template>
 
       <TransitionFade mode="out-in">
+        <FormsSignupConfirmCode
+          v-if="userAccess.codeSent.value"
+          :state="state"
+        />
 
         <UForm
           v-else
