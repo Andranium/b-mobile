@@ -13,7 +13,7 @@
 
     <p>Пожалуйста, проверьте SMS и введите код.</p>
 
-    <ULink :disabled="seconds > 0" @click="sendNewCode"
+    <ULink :disabled="seconds > 0" @click="execute"
       >запросите новый код
       <span v-if="seconds > 0">({{ seconds }} сек.)</span></ULink
     >
@@ -27,6 +27,15 @@ import { useUserAccess } from '~/composables/Forms/useUserAccess';
 const { state } = defineProps<{ state: SignupUserData }>();
 
 const userAccess = useUserAccess();
+
+const toast = useToast();
+
+const confirmCode = (code: string[]) => {
+  userAccess.confirmCode({
+    ...state,
+    code: code.join(''),
+  });
+};
 
 const seconds = ref(60);
 
@@ -44,22 +53,28 @@ const timer = () => {
   }, 1000);
 };
 
-const confirmCode = (code: string[]) => {
-  userAccess.confirmCode({
-    ...state,
-    code: code.join(''),
-  });
-};
+const { execute } = useFetch('/api/auth/sendCode', {
+  method: 'post',
+  body: computed(() => ({
+    phone: state.phone,
+  })),
+  immediate: false,
+  lazy: true,
+  onResponse({ response }) {
+    if (response.ok) {
+      timer();
 
-const sendNewCode = async () => {
-  try {
-    await userAccess.sendCode({ data: state });
-
-    timer();
-  } catch (error) {
-    console.log(error);
-  }
-};
+      toast.add({
+        title: 'Код подтверждения отправлен',
+        description:
+          'Мы отправили код на ваш номер телефона. Проверьте SMS и введите код в поле ниже. Если код не пришел, запросите новый через 60 секунд.',
+        color: 'success',
+      });
+    } else {
+      userAccess.errorHandler(response.status);
+    }
+  },
+});
 
 onMounted(() => {
   timer();

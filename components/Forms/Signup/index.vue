@@ -2,12 +2,16 @@
   <div class="sign-up">
     <UCard class="sign-up__card">
       <template #header>
-        <div class="font-bold">Регистрация</div>
+        <div
+          class="font-bold"
+        >
+          Регистрация
+        </div>
       </template>
 
       <TransitionFade mode="out-in">
         <FormsSignupConfirmCode
-          v-if="userAccess.codeConfirm.value"
+          v-if="userAccess.codeConfirmed.value"
           :state="state"
         />
 
@@ -72,7 +76,7 @@
 
       <template #footer>
         <TransitionFade mode="out-in">
-          <div v-if="!userAccess.codeConfirm.value" class="sign-up__footer">
+          <div v-if="!userAccess.codeConfirmed.value" class="sign-up__footer">
             <UButton
               :loading="status === 'pending'"
               size="lg"
@@ -105,7 +109,7 @@ import { useUserAccess } from '~/composables/Forms/useUserAccess';
 const schema = signUpForm;
 
 const goBack = () => {
-  userAccess.codeConfirm.value = false;
+  userAccess.codeConfirmed.value = false;
 };
 
 const userAccess = useUserAccess();
@@ -122,21 +126,14 @@ const state = reactive<SignupUserData>({
 
 const passwordShown = ref(false);
 
-const { status, execute } = useFetch('/api/auth/sendCode', {
-  method: 'post',
-  body: computed(() => ({
-    phone: state.phone,
-  })),
-  immediate: false,
-  lazy: true,
-  onResponse({ response }) {
-    if (response.ok) {
-      userAccess.codeConfirm.value = true;
-    } else {
-      userAccess.errorHandler(response.status);
-    }
+const { status, execute } = useAsyncData(
+  'sendVerificationCode',
+  () => userAccess.sendVerificationCode(state.phone),
+  {
+    immediate: false,
+    lazy: true,
   },
-});
+);
 </script>
 
 <style scoped lang="scss">

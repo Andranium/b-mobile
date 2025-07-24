@@ -10,7 +10,7 @@
         :schema="schema"
         class="sign-in__form"
         :state="state"
-        @submit="userAccess.userSignin"
+        @submit="execute"
       >
         <UFormField label="Телефон" name="phone">
           <UInput
@@ -40,7 +40,7 @@
           <UButton
             size="lg"
             color="primary"
-            :loading="userAccess.loading.value"
+            :loading="isLoading"
             @click="signinUser"
           >
             Войти
@@ -73,6 +73,17 @@ const state = reactive<SigninUser>({
   phone: '',
   password: '',
 });
+
+const { execute, status } = useAsyncData(
+  'signIn',
+  () => userAccess.userSignin(state),
+  {
+    immediate: false,
+    lazy: true,
+  },
+);
+
+const isLoading = computed(() => status.value === 'pending');
 </script>
 
 <style scoped lang="scss">
