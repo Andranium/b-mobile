@@ -5,30 +5,52 @@
     <UButton v-if="!loggedIn" size="lg" class="ml-auto" to="/signin">
       Войти
     </UButton>
-    <div v-else>{{ user?.name }}</div>
+
+    <UDropdownMenu v-else :items="userAccountLinks">
+      <UButton
+        :label="user?.name"
+        color="neutral"
+        size="lg"
+        variant="outline"
+        icon="i-lucide-menu"
+      />
+    </UDropdownMenu>
   </header>
 </template>
 
 <script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui';
+import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 
-const { loggedIn, user } = useUserSession();
+const { loggedIn, user, clear } = useUserSession();
 
-console.log(loggedIn.value);
+const items = ref<NavigationMenuItem[]>([
+  {
+    label: 'Главная',
+    to: '/',
+  },
+  {
+    label: 'Автопарк',
+    to: '/cars',
+  },
+  {
+    label: 'О нас',
+    to: '/about',
+  },
+]);
 
-const items = ref<NavigationMenuItem[][]>([
+const userAccountLinks = ref<DropdownMenuItem[][]>([
   [
     {
-      label: 'Главная',
-      to: '/',
+      label: 'Личный кабинет',
+      icon: 'i-lucide-users',
+      to: '/lk',
     },
+  ],
+  [
     {
-      label: 'Автопарк',
-      to: '/cars',
-    },
-    {
-      label: 'О нас',
-      to: '/about',
+      label: 'Выйти',
+      icon: 'i-lucide-log-out',
+      onSelect: () => clear(),
     },
   ],
 ]);

@@ -1,6 +1,6 @@
 <template>
   <div class="recovery-password">
-    <Index />
+    <FormsPasswordRecovery />
   </div>
 </template>
 
