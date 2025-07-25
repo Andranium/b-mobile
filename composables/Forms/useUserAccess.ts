@@ -43,6 +43,8 @@ export const useUserAccess = () => {
         body: data,
       });
 
+      await userSignin(data);
+
       toast.add({
         title: 'Добро пожаловать! Ваш аккаунт успешно создан!',
         description: 'Переводим вас на главную страницу...',
@@ -90,32 +92,13 @@ export const useUserAccess = () => {
     }
   };
 
-  const confirmCode = async (data: SignupUserData & { code: string }) => {
-    try {
-      await $fetch('/api/auth/confirmCode', {
-        method: 'post',
-        body: {
-          phone: data.phone,
-          code: data.code,
-        },
-      });
-
-      codeConfirmed.value = true;
-
-      await registerUser(data);
-
-      await userSignin(data);
-    } catch (error) {
-      caughtError(error);
-    }
-  };
-
   return {
     codeSent,
     codeConfirmed,
-    confirmCode,
+    registerUser,
     errorHandler,
     userSignin,
     sendVerificationCode,
+    caughtError
   };
 };

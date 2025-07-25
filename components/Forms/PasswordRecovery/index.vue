@@ -6,9 +6,13 @@
       </template>
 
       <TransitionFade mode="out-in">
-        <FormsPasswordRecoveryConfirm />
+<!--        <FormsPasswordRecoveryConfirm />-->
+
+        <FormsSignupConfirmCode text="Для завершения регистрации введите код, который мы отправили на ваш номер.
+      Это поможет нам убедиться, что вы — это вы, и защитить ваш аккаунт." />
 
         <UForm
+            v-if="false"
             ref="form"
             :state="state"
             :schema="schema"

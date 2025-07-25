@@ -1,19 +1,18 @@
 <template>
   <div class="sign-up__confirm">
     <p>
-      Для завершения регистрации введите код, который мы отправили на ваш номер.
-      Это поможет нам убедиться, что вы — это вы, и защитить ваш аккаунт.
+      {{ text }}
     </p>
 
     <p>
-      Код отправлен на: <strong>{{ state.phone }}</strong>
+      Код отправлен на: <strong>{{ phone }}</strong>
     </p>
 
-    <UPinInput length="4" otp @complete="confirmCode" />
+    <UPinInput length="4" otp @complete="pinFilled" />
 
     <p>Пожалуйста, проверьте SMS и введите код.</p>
 
-    <ULink :disabled="seconds > 0" @click="execute"
+    <ULink :disabled="seconds > 0" @click="requestNewCode"
       >запросите новый код
       <span v-if="seconds > 0">({{ seconds }} сек.)</span></ULink
     >
@@ -21,21 +20,33 @@
 </template>
 
 <script setup lang="ts">
-import type { SignupUserData } from '~/components/Forms/types';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
-const { state } = defineProps<{ state: SignupUserData }>();
+const { text, phone } = defineProps<{ text: string, phone: string }>();
 
 const userAccess = useUserAccess();
 
-const toast = useToast();
+const emits = defineEmits(['code:confirmed']);
 
-const confirmCode = (code: string[]) => {
-  userAccess.confirmCode({
-    ...state,
-    code: code.join(''),
-  });
-};
+const pinFilled = async (code: string[]) => {
+  const codeStr = code.join('');
+
+  try {
+    await $fetch('/api/auth/confirmCode', {
+      method: 'post',
+      body: {
+        phone,
+        code: codeStr,
+      },
+    });
+
+    userAccess.codeConfirmed.value = true;
+
+    emits('code:confirmed');
+  } catch (error: unknown) {
+    userAccess.caughtError(error);
+  }
+}
 
 const seconds = ref(60);
 
@@ -53,36 +64,17 @@ const timer = () => {
   }, 1000);
 };
 
-const { execute } = useFetch('/api/auth/sendCode', {
-  method: 'post',
-  body: computed(() => ({
-    phone: state.phone,
-  })),
-  immediate: false,
-  lazy: true,
-  onResponse({ response }) {
-    if (response.ok) {
-      timer();
-
-      toast.add({
-        title: 'Код подтверждения отправлен',
-        description:
-          'Мы отправили код на ваш номер телефона. Проверьте SMS и введите код в поле ниже. Если код не пришел, запросите новый через 60 секунд.',
-        color: 'success',
-      });
-    } else {
-      userAccess.errorHandler(response.status);
-    }
-  },
-});
-
-onMounted(() => {
-  timer();
-});
+const requestNewCode = () => userAccess.sendVerificationCode(phone);
 
 onBeforeUnmount(() => {
   clearInterval(interval.value);
 });
+
+watch(() => userAccess.codeSent.value, () => {
+  timer();
+}, {
+  immediate: true,
+})
 </script>
 
 <style scoped lang="scss"></style>

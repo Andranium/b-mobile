@@ -8,7 +8,10 @@
       <TransitionFade mode="out-in">
         <FormsSignupConfirmCode
           v-if="userAccess.codeSent.value"
-          :state="state"
+          text="Для завершения регистрации введите код, который мы отправили на ваш номер.
+      Это поможет нам убедиться, что вы — это вы, и защитить ваш аккаунт."
+          :phone="state.phone"
+          @code:confirmed="createUser"
         />
 
         <UForm
@@ -130,6 +133,10 @@ const { status, execute } = useAsyncData(
     lazy: true,
   },
 );
+
+const createUser = () => {
+  userAccess.registerUser(state);
+}
 </script>
 
 <style scoped lang="scss">
