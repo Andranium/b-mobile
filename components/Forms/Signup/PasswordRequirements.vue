@@ -59,10 +59,10 @@ const strength = computed(() => checkStrength(password));
 const score = computed(() => strength.value.filter((req) => req.met).length);
 
 const color = computed(() => {
-  if (score.value === 0) return 'neutral'
-  if (score.value <= 1) return 'error'
-  if (score.value <= 2) return 'warning'
-  if (score.value === 4) return 'warning'
+  if (score.value === 0) return 'neutral';
+  if (score.value <= 1) return 'error';
+  if (score.value <= 2) return 'warning';
+  if (score.value === 4) return 'warning';
   return 'success';
 });
 
