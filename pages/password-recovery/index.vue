@@ -1,6 +1,6 @@
 <template>
-  <div class="sign-in">
-    <FormsSignin />
+  <div class="recovery-password">
+    <FormsPasswordRecovery />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ definePageMeta({
 </script>
 
 <style scoped lang="scss">
-.sign-in {
+.recovery-password {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,10 +1,14 @@
 <template>
-  <div class="sign-up bg-primary">
+  <div class="sign-up">
     <FormsSignup />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({
+  middleware: ['auth'],
+});
+</script>
 
 <style scoped lang="scss">
 .sign-up {
