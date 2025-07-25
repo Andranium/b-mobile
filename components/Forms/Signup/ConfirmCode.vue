@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-up__confirm">
+  <div class="confirm-code">
     <p>
       {{ text }}
     </p>
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
-const { text, phone } = defineProps<{ text: string, phone: string }>();
+const { text, phone } = defineProps<{ text: string; phone: string }>();
 
 const userAccess = useUserAccess();
 
@@ -46,13 +46,17 @@ const pinFilled = async (code: string[]) => {
   } catch (error: unknown) {
     userAccess.caughtError(error);
   }
-}
+};
 
 const seconds = ref(60);
 
 const interval = ref();
 
 const timer = () => {
+  if (!import.meta.client) {
+    return;
+  }
+
   seconds.value = 60;
 
   interval.value = setInterval(() => {
@@ -70,11 +74,16 @@ onBeforeUnmount(() => {
   clearInterval(interval.value);
 });
 
-watch(() => userAccess.codeSent.value, () => {
-  timer();
-}, {
+watch(() => userAccess.codeSent.value, timer, {
   immediate: true,
-})
+});
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.confirm-code {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+}
+</style>

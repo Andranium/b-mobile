@@ -1,4 +1,7 @@
-import type { SignupUserData } from '~/components/Forms/types';
+import type {
+  RecoveryPassword,
+  SignupUserData,
+} from '~/components/Forms/types';
 import type { UserBase } from '~/composables/Forms/types';
 
 export const useUserAccess = () => {
@@ -92,6 +95,29 @@ export const useUserAccess = () => {
     }
   };
 
+  const passwordRecovery = async (data: RecoveryPassword) => {
+    try {
+      await $fetch('/api/auth/recoverPassword', {
+        method: 'post',
+        body: {
+          phone: data.phone,
+          password: data.password,
+        },
+      });
+
+      toast.add({
+        title: 'Пароль успешно изменён!',
+        description:
+            'Ваш пароль был успешно обновлён. Вы будете перенаправлены на страницу входа.',
+        color: 'success',
+      });
+
+      await router.push('/signin');
+    } catch (error) {
+      caughtError(error);
+    }
+  };
+
   return {
     codeSent,
     codeConfirmed,
@@ -99,6 +125,7 @@ export const useUserAccess = () => {
     errorHandler,
     userSignin,
     sendVerificationCode,
-    caughtError
+    passwordRecovery,
+    caughtError,
   };
 };

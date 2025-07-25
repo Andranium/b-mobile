@@ -30,11 +30,14 @@ export const signInForm = object({
 });
 
 export const recoveryNewPassword = object({
-    phone: string()
-        .matches(phoneRegexp, {
-            message: INCORRECT_PHONE_NUMBER,
-        })
-        .required(REQUIRED),
-    password: string().min(8, SHORT_FIELD).required(REQUIRED),
-    repeatPassword: string().oneOf([ref('password')], NOT_MATCHING_PASSWORDS).min(8, SHORT_FIELD).required(REQUIRED),
+  phone: string()
+    .matches(phoneRegexp, {
+      message: INCORRECT_PHONE_NUMBER,
+    })
+    .required(REQUIRED),
+  password: string().min(8, SHORT_FIELD).required(REQUIRED),
+  repeatPassword: string()
+    .oneOf([ref('password')], NOT_MATCHING_PASSWORDS)
+    .min(8, SHORT_FIELD)
+    .required(REQUIRED),
 });

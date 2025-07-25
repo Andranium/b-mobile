@@ -8,7 +8,7 @@ export interface SignupUserData extends SigninUser {
 }
 
 export interface RecoveryPassword {
-    phone: string
-    password: string;
-    repeatPassword: string;
+  phone: string;
+  password: string;
+  repeatPassword: string;
 }

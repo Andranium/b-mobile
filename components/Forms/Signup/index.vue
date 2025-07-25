@@ -136,7 +136,7 @@ const { status, execute } = useAsyncData(
 
 const createUser = () => {
   userAccess.registerUser(state);
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -147,13 +147,6 @@ const createUser = () => {
 
   &__form {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  &__confirm {
-    display: flex;
-    align-items: center;
     flex-direction: column;
     gap: 16px;
   }

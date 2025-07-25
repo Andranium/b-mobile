@@ -34,16 +34,16 @@
           >
             <template #trailing>
               <UButton
-                  color="neutral"
-                  variant="link"
-                  size="sm"
-                  :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
-                  :aria-label="
-                    passwordShown ? 'Показать пароль' : 'Скрыть пароль'
-                  "
-                  :aria-pressed="passwordShown"
-                  aria-controls="password"
-                  @click="passwordShown = !passwordShown"
+                color="neutral"
+                variant="link"
+                size="sm"
+                :icon="passwordShown ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                :aria-label="
+                  passwordShown ? 'Показать пароль' : 'Скрыть пароль'
+                "
+                :aria-pressed="passwordShown"
+                aria-controls="password"
+                @click="passwordShown = !passwordShown"
               />
             </template>
           </UInput>
