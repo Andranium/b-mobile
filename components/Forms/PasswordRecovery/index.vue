@@ -6,7 +6,7 @@
       </template>
 
       <TransitionFade mode="out-in">
-        <FormsSignupConfirmCode
+        <ConfirmCode
           v-if="userAccess.codeSent.value"
           text="Для завершения регистрации введите код, который мы отправили на ваш номер.
       Это поможет нам убедиться, что вы — это вы, и защитить ваш аккаунт."

@@ -4,7 +4,7 @@
       :color="color"
       :indicator="text"
       :model-value="score"
-      :max="2"
+      :max="5"
       size="sm"
     />
 
@@ -44,6 +44,9 @@ function checkStrength(str: string) {
   const requirements = [
     { regex: /.{8,}/, text: 'Не менее 8 символов' },
     { regex: /\W/, text: 'Хотя бы 1 специальный символ (!?.~)' },
+    { regex: /(?=.*[a-z])/, text: 'Хотя бы 1 строчную букву' },
+    { regex: /(?=.*[A-Z])/, text: 'Хотя бы 1 заглавную букву' },
+    { regex: /(?=.*\d)/, text: 'Хотя бы одна цифра (0–9)' },
   ];
 
   return requirements.map((req) => ({
@@ -56,14 +59,16 @@ const strength = computed(() => checkStrength(password));
 const score = computed(() => strength.value.filter((req) => req.met).length);
 
 const color = computed(() => {
-  if (score.value === 0) return 'neutral';
-  if (score.value <= 1) return 'error';
+  if (score.value === 0) return 'neutral'
+  if (score.value <= 1) return 'error'
+  if (score.value <= 2) return 'warning'
+  if (score.value === 4) return 'warning'
   return 'success';
 });
 
 const text = computed(() => {
   if (score.value === 0) return 'Введите пароль';
-  if (score.value <= 1) return 'Слабый пароль';
+  if (score.value <= 4) return 'Слабый пароль';
   return 'Надежный пароль';
 });
 </script>

@@ -8,7 +8,7 @@ const NOT_MATCHING_PASSWORDS = 'Пароли должны быть одинак�
 const INCORRECT_PASSWORD_FORMAT = 'Пароль не соответствует требованиям';
 
 const INCORRECT_PASSWORD_FORMAT_REGEXP =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[\]{;:'"\\|,.<>/?-]).+$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+=[\]{;:'"\\|,.<>/?-])(?=.*\d).+$/;
 
 const PHONE_REQUIREMENTS = string()
   .matches(phoneRegexp, {
