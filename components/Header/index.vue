@@ -21,6 +21,8 @@
 <script setup lang="ts">
 import type { NavigationMenuItem, DropdownMenuItem } from '@nuxt/ui';
 
+const router = useRouter();
+
 const { loggedIn, user, clear } = useUserSession();
 
 const items = ref<NavigationMenuItem[]>([
@@ -50,7 +52,11 @@ const userAccountLinks = ref<DropdownMenuItem[][]>([
     {
       label: 'Выйти',
       icon: 'i-lucide-log-out',
-      onSelect: () => clear(),
+      onSelect: async () => {
+        await router.push('/signin');
+
+        await clear();
+      },
     },
   ],
 ]);
