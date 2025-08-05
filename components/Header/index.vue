@@ -8,7 +8,7 @@
 
     <UDropdownMenu v-else :items="userAccountLinks">
       <UButton
-        :label="user?.name"
+        :label="user?.first_name"
         color="neutral"
         size="lg"
         variant="outline"
