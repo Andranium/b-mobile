@@ -22,7 +22,8 @@ const PASSWORD_REQUIREMENTS = string()
   .required(REQUIRED);
 
 export const signUpForm = object({
-  name: string().required(REQUIRED),
+  first_name: string().required(REQUIRED),
+  middle_name: string().required(REQUIRED),
   phone: PHONE_REQUIREMENTS,
   password: PASSWORD_REQUIREMENTS,
 });

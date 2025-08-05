@@ -4,7 +4,8 @@ export interface SigninUser {
 }
 
 export interface SignupUserData extends SigninUser {
-  name: string;
+  first_name: string;
+  middle_name: string;
 }
 
 export interface RecoveryPassword {
