@@ -5,7 +5,7 @@
     <Sidebar class="main__sidebar" />
 
     <div class="main__content p-4 pb-0 pr-0 lg:p-8 lg:pr-0">
-      <div class="main__wrapper pr-4 lg:pr-8">
+      <div class="main__wrapper pr-4 p-1 lg:pr-8">
         <slot />
       </div>
     </div>

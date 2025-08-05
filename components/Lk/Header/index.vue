@@ -1,5 +1,5 @@
 <template>
-  <UCard class="user m-1 shadow-md">
+  <UCard class="user shadow-md">
     <div class="user__wrapper">
       <UAvatar class="h-20 w-20 rounded" :alt="user?.first_name" size="xl" />
 
