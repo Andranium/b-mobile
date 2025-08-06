@@ -32,9 +32,9 @@
             />
           </UFormField>
 
-          <UFormField label="Фамилия" name="middle_name">
+          <UFormField label="Фамилия" name="last_name">
             <UInput
-                v-model="state.middle_name"
+                v-model="state.last_name"
                 variant="soft"
                 size="xl"
                 class="w-full"
@@ -128,7 +128,8 @@ const signupUser = () => form.value.submit();
 
 const state = reactive<SignupUserData>({
   first_name: '',
-  middle_name: '',
+  last_name: '',
+  middle_name: 'Барахолка',
   phone: '',
   password: '',
 });

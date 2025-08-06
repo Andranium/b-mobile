@@ -14,6 +14,8 @@ export default defineEventHandler(async (event) => {
         phone,
         password: body.password,
         name: body.name,
+        first_name: body.first_name,
+        last_name: body.last_name
       },
     });
   } catch (e) {
