@@ -53,7 +53,8 @@ const { data: location, status } = useFetch<LocationItem[]>('/api/getAddress', {
   query: {
     address: searchTerm,
   },
-  immediate: false,
+  server: false,
+  lazy: true,
   transform: cityFilter,
 });
 </script>

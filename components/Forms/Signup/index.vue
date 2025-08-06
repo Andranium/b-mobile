@@ -22,16 +22,25 @@
           class="sign-up__form"
           @submit="execute"
         >
-          <UFormField label="Ваше имя" name="name">
+          <UFormField label="Имя" name="first_name">
             <UInput
-              v-model="state.name"
-              variant="soft"
-              size="xl"
-              class="w-full"
-              placeholder="Иван"
+                v-model="state.first_name"
+                variant="soft"
+                size="xl"
+                class="w-full"
+                placeholder="Иван"
             />
           </UFormField>
 
+          <UFormField label="Фамилия" name="last_name">
+            <UInput
+                v-model="state.last_name"
+                variant="soft"
+                size="xl"
+                class="w-full"
+                placeholder="Иванов"
+            />
+          </UFormField>
           <UFormField label="Телефон" name="phone">
             <UInput
               v-model="state.phone"
@@ -118,7 +127,9 @@ const form = ref();
 const signupUser = () => form.value.submit();
 
 const state = reactive<SignupUserData>({
-  name: '',
+  first_name: '',
+  last_name: '',
+  middle_name: 'Барахолка',
   phone: '',
   password: '',
 });

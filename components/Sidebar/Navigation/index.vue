@@ -16,6 +16,7 @@
         :icon="`material-symbols:${item.icon}`"
         :color="i === 0 ? 'primary' : 'secondary'"
         variant="ghost"
+        :to="item.to"
       />
     </UTooltip>
 
@@ -40,17 +41,15 @@
 </template>
 
 <script setup lang="ts">
-const items = [
-  {
-    icon: 'percent-rounded',
-    tooltip: 'Новости и акции',
-  },
+import {SIDEBAR_NAVIGATION} from "~/utils/navigation";
 
-  {
-    icon: 'directions-car-outline-rounded',
-    tooltip: 'Список машин',
-  },
-];
+const route = useRoute();
+
+const items = computed(() => {
+  const [item] = route.matched;
+
+  return SIDEBAR_NAVIGATION[item?.name as keyof typeof SIDEBAR_NAVIGATION] ?? [];
+});
 </script>
 
 <style scoped lang="scss">

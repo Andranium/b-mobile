@@ -1,5 +1,4 @@
-declare module '#auth-utils' {
-  interface User {
+export interface User {
     id: string;
     phone_number: string;
     role: string;
@@ -14,7 +13,4 @@ declare module '#auth-utils' {
     gender: 'male' | 'female';
     passport: string;
     sponsor_id?: string;
-  }
 }
-
-export {};
