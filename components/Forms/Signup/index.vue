@@ -24,21 +24,21 @@
         >
           <UFormField label="Имя" name="first_name">
             <UInput
-                v-model="state.first_name"
-                variant="soft"
-                size="xl"
-                class="w-full"
-                placeholder="Иван"
+              v-model="state.first_name"
+              variant="soft"
+              size="xl"
+              class="w-full"
+              placeholder="Иван"
             />
           </UFormField>
 
           <UFormField label="Фамилия" name="last_name">
             <UInput
-                v-model="state.last_name"
-                variant="soft"
-                size="xl"
-                class="w-full"
-                placeholder="Иванов"
+              v-model="state.last_name"
+              variant="soft"
+              size="xl"
+              class="w-full"
+              placeholder="Иванов"
             />
           </UFormField>
           <UFormField label="Телефон" name="phone">
@@ -109,7 +109,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SignupUserData } from '~/components/Forms/types';
+import type { SignupUserData } from '~/types/forms';
 import { signUpForm } from '~/utils/schemas';
 import { phoneMask } from '~/utils';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';

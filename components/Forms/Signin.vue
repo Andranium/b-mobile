@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import { phoneMask } from '~/utils';
 import { signInForm } from '~/utils/schemas';
-import type { SigninUser } from '~/components/Forms/types';
+import type { SigninUser } from '~/types/forms';
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 
 const schema = signInForm;

@@ -1,4 +1,4 @@
-import type { OfficeObject } from '~/components/Calculator/types';
+import type { OfficeObject } from '~/types/calculator';
 
 export const OFFICES: OfficeObject[] = [
   {

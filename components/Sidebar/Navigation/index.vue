@@ -41,14 +41,16 @@
 </template>
 
 <script setup lang="ts">
-import {SIDEBAR_NAVIGATION} from "~/utils/navigation";
+import { SIDEBAR_NAVIGATION } from '~/utils/navigation';
 
 const route = useRoute();
 
 const items = computed(() => {
   const [item] = route.matched;
 
-  return SIDEBAR_NAVIGATION[item?.name as keyof typeof SIDEBAR_NAVIGATION] ?? [];
+  return (
+    SIDEBAR_NAVIGATION[item?.name as keyof typeof SIDEBAR_NAVIGATION] ?? []
+  );
 });
 </script>
 

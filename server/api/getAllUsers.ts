@@ -1,3 +1,3 @@
 export default defineEventHandler((event) => {
-    return apiFetch(event, '/users');
+  return apiFetch(event, '/users');
 });

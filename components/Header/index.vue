@@ -44,14 +44,14 @@ const userAccountLinks = ref<DropdownMenuItem[][]>([
   [
     {
       label: 'Личный кабинет',
-      icon: 'i-lucide-users',
+      icon: 'material-symbols:account-box',
       to: '/lk',
     },
   ],
   [
     {
       label: 'Выйти',
-      icon: 'i-lucide-log-out',
+      icon: 'material-symbols:exit-to-app-rounded',
       onSelect: async () => {
         await router.push('/signin');
 
@@ -60,6 +60,14 @@ const userAccountLinks = ref<DropdownMenuItem[][]>([
     },
   ],
 ]);
+
+if (user.value?.role === 'admin' || user.value?.role === 'asistant') {
+  userAccountLinks.value[0]!.push({
+    label: 'Дашборд',
+    icon: 'material-symbols:dashboard-rounded',
+    to: '/dashboard/users',
+  });
+}
 </script>
 
 <style scoped lang="scss">

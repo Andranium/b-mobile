@@ -1,5 +1,5 @@
 <template>
-  <div class="lk" >
+  <div class="lk">
     <LkHeader />
 
     <NuxtPage />
@@ -9,13 +9,11 @@
 <script setup lang="ts">
 definePageMeta({
   middleware: ['protected'],
-})
+});
 
 // const { data } = useFetch('/api/currentUser');
 //
 // console.log(data)
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

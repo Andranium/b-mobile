@@ -29,10 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  CalculatorMapProps,
-  RoutingNavigation,
-} from '~/components/Calculator/types';
+import type { CalculatorMapProps, RoutingNavigation } from '~/types/calculator';
 import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
 
 const calculatorStore = useCalculatorStore();

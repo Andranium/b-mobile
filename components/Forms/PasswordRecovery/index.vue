@@ -111,7 +111,7 @@
 <script setup lang="ts">
 import { useUserAccess } from '~/composables/Forms/useUserAccess';
 import { phoneMask } from '~/utils';
-import type { RecoveryPassword } from '~/components/Forms/types';
+import type { RecoveryPassword } from '~/types/forms';
 import { recoveryNewPassword } from '~/utils/schemas';
 
 const schema = recoveryNewPassword;

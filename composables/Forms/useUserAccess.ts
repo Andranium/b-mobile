@@ -1,8 +1,8 @@
 import type {
   RecoveryPassword,
+  SigninUser,
   SignupUserData,
-} from '~/components/Forms/types';
-import type { UserBase } from '~/composables/Forms/types';
+} from '~/types/forms';
 
 export const useUserAccess = () => {
   const router = useRouter();
@@ -80,7 +80,7 @@ export const useUserAccess = () => {
     }
   };
 
-  const userSignin = async (data: UserBase) => {
+  const userSignin = async (data: SigninUser) => {
     try {
       await $fetch('/api/auth/login', {
         method: 'post',

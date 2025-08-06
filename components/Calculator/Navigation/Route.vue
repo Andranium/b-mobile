@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { useCalculatorStore } from '~/store/calculator/useCalculatorStore';
 import { debounce } from '@morev/utils';
-import type { LocationItem } from '~/components/Calculator/types';
+import type { LocationItem } from '~/types/calculator';
 
 const calculatorStore = useCalculatorStore();
 
