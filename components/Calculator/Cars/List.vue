@@ -37,7 +37,7 @@ import { TransitionFade } from '@morev/vue-transitions';
 
 const calculatorStore = useCalculatorStore();
 
-const carQuery = '';
+const carQuery = ref('');
 
 const loaded = ref(false);
 

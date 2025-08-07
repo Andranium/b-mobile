@@ -40,34 +40,38 @@ const items = ref<NavigationMenuItem[]>([
   },
 ]);
 
-const userAccountLinks = ref<DropdownMenuItem[][]>([
-  [
+const userAccountLinks = computed<DropdownMenuItem[][]>(() => {
+  const firstPart = [
     {
       label: 'Личный кабинет',
       icon: 'material-symbols:account-box',
       to: '/lk',
-    },
-  ],
-  [
-    {
-      label: 'Выйти',
-      icon: 'material-symbols:exit-to-app-rounded',
-      onSelect: async () => {
-        await router.push('/signin');
+    }
+  ];
 
-        await clear();
-      },
-    },
-  ],
-]);
+  if (user.value?.role === 'admin' || user.value?.role === 'asistant') {
+    firstPart.push({
+      label: 'Дашборд',
+      icon: 'material-symbols:dashboard-rounded',
+      to: '/dashboard/users',
+    });
+  }
 
-if (user.value?.role === 'admin' || user.value?.role === 'asistant') {
-  userAccountLinks.value[0]!.push({
-    label: 'Дашборд',
-    icon: 'material-symbols:dashboard-rounded',
-    to: '/dashboard/users',
-  });
-}
+  return [
+      firstPart,
+      [
+        {
+          label: 'Выйти',
+          icon: 'material-symbols:exit-to-app-rounded',
+          onSelect: async () => {
+            await router.push('/signin');
+
+            await clear();
+          },
+        },
+      ],
+  ]
+});
 </script>
 
 <style scoped lang="scss">
