@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
         password: body.password,
         name: body.name,
         first_name: body.first_name,
-        last_name: body.last_name
+        last_name: body.last_name,
       },
     });
   } catch (e) {

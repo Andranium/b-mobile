@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { NavigationObject } from '~/components/Calculator/types';
+import type { NavigationObject } from '~/types/calculator';
 
 export const useCalculatorStore = defineStore('calculator-store', () => {
   const date = shallowRef();
