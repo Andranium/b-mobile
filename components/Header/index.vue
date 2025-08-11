@@ -46,7 +46,7 @@ const userAccountLinks = computed<DropdownMenuItem[][]>(() => {
       label: 'Личный кабинет',
       icon: 'material-symbols:account-box',
       to: '/lk',
-    }
+    },
   ];
 
   if (user.value?.role === 'admin' || user.value?.role === 'asistant') {
@@ -58,19 +58,19 @@ const userAccountLinks = computed<DropdownMenuItem[][]>(() => {
   }
 
   return [
-      firstPart,
-      [
-        {
-          label: 'Выйти',
-          icon: 'material-symbols:exit-to-app-rounded',
-          onSelect: async () => {
-            await router.push('/signin');
+    firstPart,
+    [
+      {
+        label: 'Выйти',
+        icon: 'material-symbols:exit-to-app-rounded',
+        onSelect: async () => {
+          await router.push('/signin');
 
-            await clear();
-          },
+          await clear();
         },
-      ],
-  ]
+      },
+    ],
+  ];
 });
 </script>
 
