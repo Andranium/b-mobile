@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 export const apiFetch = async <T>(
   event: any,
   url: string,
