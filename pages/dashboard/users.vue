@@ -18,12 +18,16 @@
 
 <script setup lang="ts">
 import type { User } from '~/types/common';
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, DropdownMenuItem } from '@nuxt/ui';
 import type { Column } from '@tanstack/vue-table';
 import { formatPhoneNumber } from '~/utils/common';
 import { COLORS, USER_ROLES } from '~/pages/dashboard/constants';
 
 const toast = useToast();
+
+const UButton = resolveComponent('UButton');
+const UBadge = resolveComponent('UBadge');
+const UDropdownMenu = resolveComponent('UDropdownMenu');
 
 const { data, status } = useFetch<User[]>('/api/getAllUsers', {
   transform(data) {
@@ -34,9 +38,6 @@ const { data, status } = useFetch<User[]>('/api/getAllUsers', {
     }));
   },
 });
-
-const UButton = resolveComponent('UButton');
-const UBadge = resolveComponent('UBadge');
 
 const getHeader = (
   column: Column<User>,
@@ -108,14 +109,10 @@ const columns: TableColumn<User>[] = [
     cell: ({ row }) => {
       const number = row.getValue('phone_number') as string;
 
-      return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
-        formatPhoneNumber(number),
-        h(UButton, {
+      const items = ref<DropdownMenuItem[]>([
+        {
+          label: 'Скопировать номер',
           icon: 'material-symbols:content-copy',
-          color: 'neutral',
-          variant: 'subtle',
-          title: 'Скопировать номер',
-          size: 'xs',
           onClick: async () => {
             await navigator.clipboard.writeText(number);
 
@@ -124,16 +121,40 @@ const columns: TableColumn<User>[] = [
               color: 'success',
               duration: 5000,
             });
-          },
-        }),
-        h(UButton, {
+          }
+        },
+        {
+          label: 'Позвонить',
           icon: 'material-symbols:phone-enabled',
+        },
+        {
+          label: 'Открыть Whatsapp',
+          icon: 'mingcute:whatsapp-fill',
+          href: `https://wa.me/${number}`,
+          target: '_blank',
+        },
+        {
+          label: 'Открыть Telegram',
+          icon: 'uil:telegram',
+          href: `https://t.me/${number}`,
+          target: '_blank',
+        }
+      ])
+
+      return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
+        formatPhoneNumber(number),
+        h(UDropdownMenu, {
+          items: items.value,
+          size: 'md',
+          ui: {
+            content: 'w-48'
+          }
+        }, () => h(UButton, {
+          icon: 'material-symbols:more-vert',
           color: 'neutral',
           variant: 'subtle',
-          title: 'Позвонить по номеру',
-          size: 'xs',
-          href: `tel:${number}`,
-        }),
+          size: 'xs'
+        })),
       ]);
     },
   },
