@@ -2,11 +2,24 @@
   <div class="users">
     <h1 class="text-2xl font-semibold mb-4">Пользователи</h1>
 
-    <div class="flex mb-1 px-4 py-3.5 border border-muted rounded">
+    <div class="flex mb-1 px-4 py-3.5 gap-2 border border-muted rounded">
       <UInput v-model="search" class="max-w-sm" placeholder="Поиск" />
+
+      <UDropdownMenu :items="allColumns" :content="{ align: 'end' }">
+        <UChip :show="!allColumnsShown" size="lg">
+          <UButton
+            label="Колонки"
+            color="neutral"
+            variant="outline"
+            trailing-icon="i-lucide-chevron-down"
+          />
+        </UChip>
+      </UDropdownMenu>
     </div>
 
     <UTable
+      ref="table"
+      v-model:column-visibility="columnVisibility"
       v-model:global-filter="search"
       v-model:column-pinning="pinnedColumns"
       :data="data"
@@ -21,9 +34,11 @@ import type { User } from '~/types/common';
 import type { TableColumn, DropdownMenuItem } from '@nuxt/ui';
 import type { Column } from '@tanstack/vue-table';
 import { formatPhoneNumber } from '~/utils/common';
-import { COLORS, USER_ROLES } from '~/pages/dashboard/constants';
+import { COLORS, COLUMNS, USER_ROLES } from '~/pages/dashboard/constants';
 
 const toast = useToast();
+
+const table = useTemplateRef('table');
 
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
@@ -61,7 +76,8 @@ const getHeader = (
 const columns: TableColumn<User>[] = [
   {
     accessorKey: 'id',
-    header: ({ column }) => getHeader(column, 'ID', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       return h(UButton, {
         icon: 'material-symbols:content-copy',
@@ -84,12 +100,14 @@ const columns: TableColumn<User>[] = [
 
   {
     accessorKey: 'full_name',
-    header: ({ column }) => getHeader(column, 'ФИО', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
   },
 
   {
     accessorKey: 'role',
-    header: ({ column }) => getHeader(column, 'Роль', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       const role = row.getValue('role') as string;
 
@@ -105,7 +123,8 @@ const columns: TableColumn<User>[] = [
 
   {
     accessorKey: 'phone_number',
-    header: ({ column }) => getHeader(column, 'Телефон', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       const number = row.getValue('phone_number') as string;
 
@@ -121,7 +140,7 @@ const columns: TableColumn<User>[] = [
               color: 'success',
               duration: 5000,
             });
-          }
+          },
         },
         {
           label: 'Позвонить',
@@ -138,23 +157,29 @@ const columns: TableColumn<User>[] = [
           icon: 'uil:telegram',
           href: `https://t.me/${number}`,
           target: '_blank',
-        }
-      ])
+        },
+      ]);
 
       return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
         formatPhoneNumber(number),
-        h(UDropdownMenu, {
-          items: items.value,
-          size: 'md',
-          ui: {
-            content: 'w-48'
-          }
-        }, () => h(UButton, {
-          icon: 'material-symbols:more-vert',
-          color: 'neutral',
-          variant: 'subtle',
-          size: 'xs'
-        })),
+        h(
+          UDropdownMenu,
+          {
+            items: items.value,
+            size: 'md',
+            ui: {
+              content: 'w-48',
+            },
+          },
+          () =>
+            h(UButton, {
+              icon: 'material-symbols:more-vert',
+              color: 'neutral',
+              variant: 'subtle',
+              size: 'xs',
+              title: 'Доп. возможности',
+            }),
+        ),
       ]);
     },
   },
@@ -168,6 +193,33 @@ const pinnedColumns = ref({
 });
 
 const search = ref('');
+
+const columnVisibility = ref({
+  id: false,
+});
+
+const allColumns: DropdownMenuItem = computed(() => {
+  return table.value?.tableApi
+    ?.getAllColumns()
+    .filter((column: Column<User>) => column.getCanHide())
+    .map((column: Column<User>) => ({
+      label: COLUMNS[column.id as string],
+      type: 'checkbox' as const,
+      checked: column.getIsVisible(),
+      onUpdateChecked(checked: boolean) {
+        table.value?.tableApi?.getColumn(column.id)?.toggleVisibility(checked);
+      },
+      onSelect(e?: Event) {
+        e?.preventDefault();
+      },
+    }));
+});
+
+const allColumnsShown: ComputedRef<boolean | undefined> = computed(() => {
+  const columns = table.value?.tableApi?.getAllColumns();
+
+  return columns?.every((column: Column<User>) => column.getIsVisible());
+});
 </script>
 
 <style scoped lang="scss"></style>
