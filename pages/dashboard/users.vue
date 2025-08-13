@@ -33,9 +33,7 @@
       </template>
 
       <template #loading>
-        <div class="flex items-center justify-center gap-2">
-          Загрузка
-        </div>
+        <div class="flex items-center justify-center gap-2">Загрузка...</div>
       </template>
     </UTable>
   </div>
@@ -72,17 +70,74 @@ const getHeader = (
   position: 'left' | 'right',
 ) => {
   const isPinned = column.getIsPinned();
+  const isSorted = column.getIsSorted();
 
-  return h(UButton, {
-    color: 'neutral',
-    variant: 'ghost',
-    label,
-    icon: isPinned ? 'i-lucide-pin-off' : 'i-lucide-pin',
-    class: '-mx-2.5',
-    onClick() {
-      column.pin(isPinned === position ? false : position);
+  return h(
+    'div',
+    {
+      class: 'flex items-center',
     },
-  });
+    [
+      h(
+        UDropdownMenu,
+        {
+          content: {
+            align: 'start',
+          },
+          'aria-label': 'Раскрывающийся список действий',
+          items: [
+            {
+              label: 'Восходящий',
+              type: 'checkbox',
+              icon: 'i-lucide-arrow-up-narrow-wide',
+              checked: isSorted === 'asc',
+              onSelect: () => {
+                if (isSorted === 'asc') {
+                  column.clearSorting();
+                } else {
+                  column.toggleSorting(false);
+                }
+              },
+            },
+            {
+              label: 'Нисходящий',
+              icon: 'i-lucide-arrow-down-wide-narrow',
+              type: 'checkbox',
+              checked: isSorted === 'desc',
+              onSelect: () => {
+                if (isSorted === 'desc') {
+                  column.clearSorting();
+                } else {
+                  column.toggleSorting(true);
+                }
+              },
+            },
+          ],
+        },
+        () =>
+          h(UButton, {
+            color: 'neutral',
+            variant: 'ghost',
+            icon: isSorted
+              ? isSorted === 'asc'
+                ? 'i-lucide-arrow-up-narrow-wide'
+                : 'i-lucide-arrow-down-wide-narrow'
+              : 'i-lucide-arrow-up-down',
+            class: 'data-[state=open]:bg-elevated',
+            'aria-label': `Sort by ${isSorted === 'asc' ? 'нисходящий' : 'восходящий'}`,
+          }),
+      ),
+      h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label,
+        icon: isPinned ? 'i-lucide-pin-off' : 'i-lucide-pin',
+        onClick() {
+          column.pin(isPinned === position ? false : position);
+        },
+      }),
+    ],
+  );
 };
 
 const columns: TableColumn<User>[] = [
