@@ -27,6 +27,45 @@
       :columns="columns"
       :loading="isLoading"
     >
+      <template #id-cell="{ row }">
+        <UButton
+            icon="material-symbols:content-copy"
+            color="neutral"
+            variant="subtle"
+            title="Скопировать айди пользователя"
+            size="xs"
+            @click="copyUserId(row)"
+        />
+      </template>
+
+      <template #role-cell="{ row }">
+        <UBadge class="capitalize" variant="subtle" :color="roleSettings(row).color">
+          {{ roleSettings(row).label }}
+        </UBadge>
+      </template>
+
+      <template #phone_number-cell="{ row }">
+        <div class="flex items-center font-semibold gap-2">
+          {{ formatPhoneNumber(row.getValue('phone_number') as string) }}
+
+          <UDropdownMenu
+              :items="mobileNumberActions(row.getValue('phone_number') as string)"
+              size="md"
+              :ui="{
+                content: 'w-48'
+              }"
+          >
+            <UButton
+                icon="material-symbols:more-vert"
+                color="neutral"
+                variant="subtle"
+                size="xs"
+                title="Доп. возможности"
+            />
+          </UDropdownMenu>
+        </div>
+      </template>
+
       <template #empty>
         <div class="flex items-center justify-center gap-2">
           Данные не найдены
@@ -43,7 +82,7 @@
 <script setup lang="ts">
 import type { User } from '~/types/common';
 import type { TableColumn, DropdownMenuItem } from '@nuxt/ui';
-import type { Column } from '@tanstack/vue-table';
+import type { Column, Row } from '@tanstack/vue-table';
 import { formatPhoneNumber } from '~/utils/common';
 import { COLORS, COLUMNS, USER_ROLES } from '~/pages/dashboard/constants';
 
@@ -156,24 +195,6 @@ const columns: TableColumn<User>[] = [
     accessorKey: 'id',
     header: ({ column }) =>
       getHeader(column, COLUMNS[column.id as string]!, 'left'),
-    cell: ({ row }) => {
-      return h(UButton, {
-        icon: 'material-symbols:content-copy',
-        color: 'neutral',
-        variant: 'subtle',
-        title: 'Скопировать айди пользователя',
-        size: 'xs',
-        onClick: async () => {
-          await navigator.clipboard.writeText(row.getValue('id'));
-
-          toast.add({
-            title: 'ID пользователя скопирован',
-            color: 'success',
-            duration: 5000,
-          });
-        },
-      });
-    },
   },
 
   {
@@ -186,80 +207,12 @@ const columns: TableColumn<User>[] = [
     accessorKey: 'role',
     header: ({ column }) =>
       getHeader(column, COLUMNS[column.id as string]!, 'left'),
-    cell: ({ row }) => {
-      const role = row.getValue('role') as string;
-
-      const color = COLORS[role];
-
-      return h(
-        UBadge,
-        { class: 'capitalize', variant: 'subtle', color },
-        USER_ROLES[role],
-      );
-    },
   },
 
   {
     accessorKey: 'phone_number',
     header: ({ column }) =>
       getHeader(column, COLUMNS[column.id as string]!, 'left'),
-    cell: ({ row }) => {
-      const number = row.getValue('phone_number') as string;
-
-      const items = ref<DropdownMenuItem[]>([
-        {
-          label: 'Скопировать номер',
-          icon: 'material-symbols:content-copy',
-          onClick: async () => {
-            await navigator.clipboard.writeText(number);
-
-            toast.add({
-              title: 'Номер скопирован',
-              color: 'success',
-              duration: 5000,
-            });
-          },
-        },
-        {
-          label: 'Позвонить',
-          icon: 'material-symbols:phone-enabled',
-        },
-        {
-          label: 'Открыть Whatsapp',
-          icon: 'mingcute:whatsapp-fill',
-          href: `https://wa.me/${number}`,
-          target: '_blank',
-        },
-        {
-          label: 'Открыть Telegram',
-          icon: 'uil:telegram',
-          href: `https://t.me/${number}`,
-          target: '_blank',
-        },
-      ]);
-
-      return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
-        formatPhoneNumber(number),
-        h(
-          UDropdownMenu,
-          {
-            items: items.value,
-            size: 'md',
-            ui: {
-              content: 'w-48',
-            },
-          },
-          () =>
-            h(UButton, {
-              icon: 'material-symbols:more-vert',
-              color: 'neutral',
-              variant: 'subtle',
-              size: 'xs',
-              title: 'Доп. возможности',
-            }),
-        ),
-      ]);
-    },
   },
 ];
 
@@ -300,6 +253,59 @@ const allColumnsShown: ComputedRef<boolean | undefined> = computed(() => {
 });
 
 const sorting = ref([]);
+
+const copyUserId = async (row: Row<User>) => {
+  await navigator.clipboard.writeText(row.getValue('id'));
+
+  toast.add({
+    title: 'ID пользователя скопирован',
+    color: 'success',
+    duration: 5000,
+  });
+}
+
+const roleSettings = (row: Row<User>) => {
+  const role = row.getValue('role') as string;
+
+  const color = COLORS[role];
+
+  return {
+    color,
+    label: USER_ROLES[role]
+  }
+}
+
+const mobileNumberActions = (number: string): DropdownMenuItem[] => [
+  {
+    label: 'Скопировать номер',
+    icon: 'material-symbols:content-copy',
+    onClick: async () => {
+      await navigator.clipboard.writeText(number);
+
+      toast.add({
+        title: 'Номер скопирован',
+        color: 'success',
+        duration: 5000,
+      });
+    },
+  },
+  {
+    label: 'Позвонить',
+    icon: 'material-symbols:phone-enabled',
+  },
+  {
+    label: 'Открыть Whatsapp',
+    icon: 'mingcute:whatsapp-fill',
+    href: `https://wa.me/${number}`,
+    target: '_blank',
+  },
+  {
+    label: 'Открыть Telegram',
+    icon: 'uil:telegram',
+    href: `https://t.me/${number}`,
+    target: '_blank',
+  },
+]
 </script>
 
 <style scoped lang="scss"></style>
