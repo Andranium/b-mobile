@@ -125,6 +125,10 @@ const getHeader = (
           ui: {
             content: 'w-48',
           },
+          content: {
+            side: 'left',
+            align: 'start',
+          },
         },
         () =>
           h(
