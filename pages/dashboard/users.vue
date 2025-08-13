@@ -25,7 +25,19 @@
       :data="data"
       :columns="columns"
       :loading="isLoading"
-    />
+    >
+      <template #empty>
+        <div class="flex items-center justify-center gap-2">
+          Данные не найдены
+        </div>
+      </template>
+
+      <template #loading>
+        <div class="flex items-center justify-center gap-2">
+          Загрузка
+        </div>
+      </template>
+    </UTable>
   </div>
 </template>
 
