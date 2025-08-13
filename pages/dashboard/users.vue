@@ -22,6 +22,7 @@
       v-model:column-visibility="columnVisibility"
       v-model:global-filter="search"
       v-model:column-pinning="pinnedColumns"
+      v-model:sorting="sorting"
       :data="data"
       :columns="columns"
       :loading="isLoading"
@@ -53,6 +54,7 @@ const table = useTemplateRef('table');
 const UButton = resolveComponent('UButton');
 const UBadge = resolveComponent('UBadge');
 const UDropdownMenu = resolveComponent('UDropdownMenu');
+const UChip = resolveComponent('UChip');
 
 const { data, status } = useFetch<User[]>('/api/getAllUsers', {
   transform(data) {
@@ -72,70 +74,75 @@ const getHeader = (
   const isPinned = column.getIsPinned();
   const isSorted = column.getIsSorted();
 
+  const items = ref<DropdownMenuItem[]>([
+    {
+      label: isPinned ? 'Открепить колонку' : 'Закрепить колонку',
+      icon: isPinned ? 'i-lucide-pin-off' : 'i-lucide-pin',
+      onClick: async () => {
+        column.pin(isPinned === position ? false : position);
+      },
+    },
+    {
+      label: 'Восходящий',
+      type: 'checkbox',
+      icon: 'i-lucide-arrow-up-narrow-wide',
+      checked: isSorted === 'asc',
+      onSelect: () => {
+        if (isSorted === 'asc') {
+          column.clearSorting();
+        } else {
+          column.toggleSorting(false);
+        }
+      },
+    },
+    {
+      label: 'Нисходящий',
+      icon: 'i-lucide-arrow-down-wide-narrow',
+      type: 'checkbox',
+      checked: isSorted === 'desc',
+      onSelect: () => {
+        if (isSorted === 'desc') {
+          column.clearSorting();
+        } else {
+          column.toggleSorting(true);
+        }
+      },
+    },
+  ]);
+
   return h(
     'div',
     {
-      class: 'flex items-center',
+      class: 'flex items-center gap-2',
     },
     [
+      label,
       h(
         UDropdownMenu,
         {
-          content: {
-            align: 'start',
+          items: items.value,
+          size: 'md',
+          ui: {
+            content: 'w-48',
           },
-          'aria-label': 'Раскрывающийся список действий',
-          items: [
-            {
-              label: 'Восходящий',
-              type: 'checkbox',
-              icon: 'i-lucide-arrow-up-narrow-wide',
-              checked: isSorted === 'asc',
-              onSelect: () => {
-                if (isSorted === 'asc') {
-                  column.clearSorting();
-                } else {
-                  column.toggleSorting(false);
-                }
-              },
-            },
-            {
-              label: 'Нисходящий',
-              icon: 'i-lucide-arrow-down-wide-narrow',
-              type: 'checkbox',
-              checked: isSorted === 'desc',
-              onSelect: () => {
-                if (isSorted === 'desc') {
-                  column.clearSorting();
-                } else {
-                  column.toggleSorting(true);
-                }
-              },
-            },
-          ],
         },
         () =>
-          h(UButton, {
-            color: 'neutral',
-            variant: 'ghost',
-            icon: isSorted
-              ? isSorted === 'asc'
-                ? 'i-lucide-arrow-up-narrow-wide'
-                : 'i-lucide-arrow-down-wide-narrow'
-              : 'i-lucide-arrow-up-down',
-            class: 'data-[state=open]:bg-elevated',
-            'aria-label': `Sort by ${isSorted === 'asc' ? 'нисходящий' : 'восходящий'}`,
-          }),
+          h(
+            UChip,
+            {
+              show: isPinned || isSorted,
+              size: 'lg',
+            },
+            () =>
+              h(UButton, {
+                icon: 'material-symbols:more-vert',
+                color: 'neutral',
+                variant: 'subtle',
+                size: 'xs',
+                title: 'Доп. возможности',
+              }),
+          ),
       ),
-      h(UButton, {
-        color: 'neutral',
-        variant: 'ghost',
-        label,
-        icon: isPinned ? 'i-lucide-pin-off' : 'i-lucide-pin',
-        onClick() {
-          column.pin(isPinned === position ? false : position);
-        },
-      }),
     ],
   );
 };
@@ -287,6 +294,8 @@ const allColumnsShown: ComputedRef<boolean | undefined> = computed(() => {
 
   return columns?.every((column: Column<User>) => column.getIsVisible());
 });
+
+const sorting = ref([]);
 </script>
 
 <style scoped lang="scss"></style>
