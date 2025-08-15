@@ -33,6 +33,7 @@
     "yup": "^1.6.1"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.62",
     "prettier": "^3.6.2"
   }
 }

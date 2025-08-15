@@ -9,3 +9,10 @@ export const USER_ROLES: Record<string, string> = {
   assistant: 'Сотрудник',
   user: 'Пользователь',
 };
+
+export const COLUMNS: Record<string, string> = {
+  id: 'ID',
+  full_name: 'ФИО',
+  role: 'Роль',
+  phone_number: 'Телефон',
+};

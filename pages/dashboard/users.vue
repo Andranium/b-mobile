@@ -2,65 +2,34 @@
   <div class="users">
     <h1 class="text-2xl font-semibold mb-4">Пользователи</h1>
 
-    <div class="flex mb-1 px-4 py-3.5 border border-muted rounded">
-      <UInput v-model="search" class="max-w-sm" placeholder="Поиск" />
-    </div>
-
-    <UTable
-      v-model:global-filter="search"
-      v-model:column-pinning="pinnedColumns"
-      :data="data"
+    <TableDefault
       :columns="columns"
-      :loading="isLoading"
+      :data="data"
+      :status="status"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+import type { DropdownMenuItem, TableColumn } from '@nuxt/ui';
 import type { User } from '~/types/common';
-import type { TableColumn } from '@nuxt/ui';
-import type { Column } from '@tanstack/vue-table';
+import { COLORS, COLUMNS, USER_ROLES } from '~/pages/dashboard/constants';
 import { formatPhoneNumber } from '~/utils/common';
-import { COLORS, USER_ROLES } from '~/pages/dashboard/constants';
+import { useTable } from '~/composables/Table/useTable';
+
+const UBadge = resolveComponent('UBadge');
+const UButton = resolveComponent('UButton');
+const UDropdownMenu = resolveComponent('UDropdownMenu');
 
 const toast = useToast();
 
-const { data, status } = useFetch<User[]>('/api/getAllUsers', {
-  transform(data) {
-    return data.map((item) => ({
-      ...item,
-      role: 'user',
-      full_name: `${item.first_name} ${item.middle_name ?? ''} ${item.last_name ?? ''}`,
-    }));
-  },
-});
-
-const UButton = resolveComponent('UButton');
-const UBadge = resolveComponent('UBadge');
-
-const getHeader = (
-  column: Column<User>,
-  label: string,
-  position: 'left' | 'right',
-) => {
-  const isPinned = column.getIsPinned();
-
-  return h(UButton, {
-    color: 'neutral',
-    variant: 'ghost',
-    label,
-    icon: isPinned ? 'i-lucide-pin-off' : 'i-lucide-pin',
-    class: '-mx-2.5',
-    onClick() {
-      column.pin(isPinned === position ? false : position);
-    },
-  });
-};
+const { getHeader } = useTable();
 
 const columns: TableColumn<User>[] = [
   {
     accessorKey: 'id',
-    header: ({ column }) => getHeader(column, 'ID', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       return h(UButton, {
         icon: 'material-symbols:content-copy',
@@ -83,12 +52,14 @@ const columns: TableColumn<User>[] = [
 
   {
     accessorKey: 'full_name',
-    header: ({ column }) => getHeader(column, 'ФИО', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
   },
 
   {
     accessorKey: 'role',
-    header: ({ column }) => getHeader(column, 'Роль', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       const role = row.getValue('role') as string;
 
@@ -104,18 +75,15 @@ const columns: TableColumn<User>[] = [
 
   {
     accessorKey: 'phone_number',
-    header: ({ column }) => getHeader(column, 'Телефон', 'left'),
+    header: ({ column }) =>
+      getHeader(column, COLUMNS[column.id as string]!, 'left'),
     cell: ({ row }) => {
       const number = row.getValue('phone_number') as string;
 
-      return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
-        formatPhoneNumber(number),
-        h(UButton, {
+      const items = ref<DropdownMenuItem[]>([
+        {
+          label: 'Скопировать номер',
           icon: 'material-symbols:content-copy',
-          color: 'neutral',
-          variant: 'subtle',
-          title: 'Скопировать номер',
-          size: 'xs',
           onClick: async () => {
             await navigator.clipboard.writeText(number);
 
@@ -125,28 +93,59 @@ const columns: TableColumn<User>[] = [
               duration: 5000,
             });
           },
-        }),
-        h(UButton, {
+        },
+        {
+          label: 'Позвонить',
           icon: 'material-symbols:phone-enabled',
-          color: 'neutral',
-          variant: 'subtle',
-          title: 'Позвонить по номеру',
-          size: 'xs',
-          href: `tel:${number}`,
-        }),
+        },
+        {
+          label: 'Открыть Whatsapp',
+          icon: 'mingcute:whatsapp-fill',
+          href: `https://wa.me/${number}`,
+          target: '_blank',
+        },
+        {
+          label: 'Открыть Telegram',
+          icon: 'uil:telegram',
+          href: `https://t.me/${number}`,
+          target: '_blank',
+        },
+      ]);
+
+      return h(`div`, { class: 'flex items-center font-semibold gap-2' }, [
+        formatPhoneNumber(number),
+        h(
+          UDropdownMenu,
+          {
+            items: items.value,
+            size: 'md',
+            ui: {
+              content: 'w-48',
+            },
+          },
+          () =>
+            h(UButton, {
+              icon: 'material-symbols:more-vert',
+              color: 'neutral',
+              variant: 'subtle',
+              size: 'xs',
+              title: 'Доп. возможности',
+            }),
+        ),
       ]);
     },
   },
 ];
 
-const isLoading = computed(() => status.value === 'pending');
-
-const pinnedColumns = ref({
-  left: [],
-  right: [],
+const { data, status } = useFetch<User[]>('/api/getAllUsers', {
+  transform(data) {
+    return data.map((item) => ({
+      ...item,
+      role: 'user',
+      full_name: `${item.first_name} ${item.middle_name ?? ''} ${item.last_name ?? ''}`,
+    }));
+  },
 });
-
-const search = ref('');
 </script>
 
 <style scoped lang="scss"></style>
