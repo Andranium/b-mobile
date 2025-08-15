@@ -3,7 +3,7 @@
     <h1 class="text-2xl font-semibold mb-4">Пользователи</h1>
 
     <TableDefault
-      :columns="columns as TableColumn<unknown>[]"
+      :columns="columns"
       :data="data"
       :status="status"
     />

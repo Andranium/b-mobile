@@ -25,7 +25,7 @@
       v-model:column-pinning="pinnedColumns"
       v-model:sorting="sorting"
       :data="data"
-      :columns="columns"
+      :columns="columns as TableColumn<unknown>[]"
       :loading="isLoading"
     >
       <template #empty>
@@ -53,7 +53,7 @@ const {
   data = [],
   status,
 } = defineProps<{
-  columns: TableColumn<unknown>[];
+  columns: unknown[];
   status: string;
   data?: unknown[];
 }>();
