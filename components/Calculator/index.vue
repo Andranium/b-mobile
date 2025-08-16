@@ -9,6 +9,10 @@
         <CalculatorCars />
 
         <CalculatorNavigation />
+
+        <button class="calculator__calculate">
+          Рассчитать
+        </button>
       </div>
 
       <div class="calculator__row">
@@ -41,6 +45,20 @@
   &__row {
     display: flex;
     gap: 8px;
+  }
+
+  &__calculate {
+    width: 240px;
+    background-color: var(--color-primary);
+    flex-shrink: 0;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--color-primary-hover);
+    }
   }
 }
 </style>

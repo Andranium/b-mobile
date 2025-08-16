@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-  middleware: ['protected'],
+  middleware: ['protected', 'admin-protection'],
 });
 </script>
 

@@ -44,7 +44,6 @@
     height: 100%;
     width: 100%;
     overflow: auto;
-    border-radius: 16px;
   }
 }
 </style>
